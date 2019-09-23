@@ -1,9 +1,9 @@
 # JD Visuals
-Visualizations in Delphi
+Visualization Engine in Delphi
 
 ## Summary
 
-This project is more of an experiment to play around with, as well as learn a bit about graphics and multithreading. It encapsulates a simple virtualization engine which allows you to incorporate your own visuals, and switch between them. Each visual provides different controls to the user to change how the animation works.
+This project is more of an experiment to play around with, as well as learn a bit about graphics and multithreading. It encapsulates a simple visualization engine which allows you to incorporate your own visuals, and switch between them. Each visual provides different controls to the user to change how the animation works.
 
 ![Final Frontier](/Images/SS-FinalFrontier-1.png)
 
