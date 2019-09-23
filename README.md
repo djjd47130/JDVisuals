@@ -5,6 +5,10 @@ Visualizations in Delphi
 
 This project is more of an experiment to play around with, as well as learn a bit about graphics and multithreading. It encapsulates a simple virtualization engine which allows you to incorporate your own visuals, and switch between them. Each visual provides different controls to the user to change how the animation works.
 
+![Final Frontier](/Images/SS-FinalFrontier-1.png)
+
+![Spiral Out](/Images/SS-SpiralOut-1.png)
+
 ## Prerequisites / Technology
 
  - Written on Delphi 10.1 Berlin but should work fine on other recent versions
