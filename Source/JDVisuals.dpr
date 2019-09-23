@@ -11,8 +11,8 @@ uses
   JD.Visuals.Controls in 'JD.Visuals.Controls.pas',
   JD.FibonacciVisual in 'JD.FibonacciVisual.pas',
   JD.FinalFrontierVisual in 'JD.FinalFrontierVisual.pas',
-  AvgCalc in 'AvgCalc.pas',
-  CpuUsage in 'CpuUsage.pas';
+  JD.FinalFrontierVisual.AvgCalc in 'JD.FinalFrontierVisual.AvgCalc.pas',
+  JD.FinalFrontierVisual.CpuUsage in 'JD.FinalFrontierVisual.CpuUsage.pas';
 
 {$R *.res}
 

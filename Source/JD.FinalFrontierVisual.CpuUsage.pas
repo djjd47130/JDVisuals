@@ -1,4 +1,4 @@
-unit CpuUsage;
+unit JD.FinalFrontierVisual.CpuUsage;
 
 interface
 

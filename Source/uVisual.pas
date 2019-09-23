@@ -4,6 +4,10 @@ unit uVisual;
   JD Visuals
   by Jerry Dodge
 
+  NOTE: This project makes use of the JEDI Code Library for Delphi.
+
+  OpenSource on GitHub: https://github.com/djjd47130/JDVisuals
+
   This application displays various different visuals based on customized
   visual code. There's a primary thread which is used to encapsulate the
   animation of any given visual, and then inherited objects which actually
@@ -281,10 +285,10 @@ begin
     bsSizeable: begin
       Self.BorderStyle:= bsNone;
       Self.FormStyle:= TFormStyle.fsStayOnTop;
-      Self.Left:= Screen.DesktopLeft;
-      Self.Width:= Screen.DesktopWidth;
-      Self.Top:= Screen.DesktopTop;
-      Self.Height:= Screen.DesktopHeight;
+      Self.Left:= 0;
+      Self.Width:= Screen.Width;
+      Self.Top:= 0;
+      Self.Height:= Screen.Height;
       btnFullScreen.Caption:= 'Exit Full Screen';
     end;
   end;
@@ -293,6 +297,8 @@ end;
 procedure TfrmVisual.cboVisualClick(Sender: TObject);
 begin
   try
+    if cboVisual.CanFocus then
+      cboVisual.SetFocus;
     FView.VisualIndex:= cboVisual.ItemIndex;
     Self.CreateControls;
   except

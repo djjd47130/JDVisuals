@@ -1,4 +1,4 @@
-unit AvgCalc;
+unit JD.FinalFrontierVisual.AvgCalc;
 
 interface
 
@@ -26,13 +26,6 @@ implementation
 
 { TAverageCalculator }
 
-procedure TAverageCalculator.Add(AValue: Double);
-begin
-  FItems.Add(AValue);
-  EnsureMax;
-  CalcAverage;
-end;
-
 constructor TAverageCalculator.Create;
 begin
   FMaxCount:= 200;
@@ -45,6 +38,13 @@ begin
   FItems.Clear;
   FreeAndNil(FItems);
   inherited;
+end;
+
+procedure TAverageCalculator.Add(AValue: Double);
+begin
+  FItems.Add(AValue);
+  EnsureMax;
+  CalcAverage;
 end;
 
 procedure TAverageCalculator.SetMaxCount(const Value: Integer);

@@ -8,7 +8,7 @@ uses
   Vcl.Graphics,
   GDIPAPI, GDIPOBJ,
   JD.Visuals, JD.Visuals.Utils, JD.Visuals.Controls,
-  AvgCalc, CpuUsage;
+  JD.FinalFrontierVisual.AvgCalc, JD.FinalFrontierVisual.CpuUsage;
 
 const
   SPEED_UP = 0.00046; //Speed up time
