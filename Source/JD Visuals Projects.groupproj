@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{62A66B01-9E3C-4D9F-9942-C6003EDD22BD}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="JDVisuals.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="FibonacciTest\FibonacciTest.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="JDVisuals">
+        <MSBuild Projects="JDVisuals.dproj"/>
+    </Target>
+    <Target Name="JDVisuals:Clean">
+        <MSBuild Projects="JDVisuals.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JDVisuals:Make">
+        <MSBuild Projects="JDVisuals.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="FibonacciTest">
+        <MSBuild Projects="FibonacciTest\FibonacciTest.dproj"/>
+    </Target>
+    <Target Name="FibonacciTest:Clean">
+        <MSBuild Projects="FibonacciTest\FibonacciTest.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="FibonacciTest:Make">
+        <MSBuild Projects="FibonacciTest\FibonacciTest.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="JDVisuals;FibonacciTest"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="JDVisuals:Clean;FibonacciTest:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="JDVisuals:Make;FibonacciTest:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>

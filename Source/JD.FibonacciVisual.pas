@@ -3,9 +3,9 @@ unit JD.FibonacciVisual;
 (*
   IMPORTANT NOTE
 
-  This particular visual is currently just an exact copy of the Spiral Out
-  visual, and is not currently in use. This one is aimed to represent the
-  Fibonacci spiral, which at this time is beyond what I can write.
+  This particular visual is currently in active development, and is
+  not fully functional / animated at the moment. However it does
+  at least demonstrate the drawing of the Fibonacci spiral.
 
 *)
 
@@ -18,38 +18,16 @@ uses
   GDIPAPI, GDIPOBJ,
   JD.Visuals, JD.Visuals.Utils, JD.Visuals.Controls;
 
-const
-  POINT_COUNT = 130;
-  COLOR_TIMER_DELAY = 150;
-  COLOR_FADE = -1; //Recommended to keep at -1
-  COLOR_MAX = 253;
-  COLOR_MIN = COLOR_MAX - POINT_COUNT + 10;
-
 type
-  TSpiralPoint = record
-    Degrees: Currency;
-    Distance: Currency;
-    Speed: Currency;
-  end;
+  TFibDir = (fbUp, fbLeft, fbDown, fbRight);
 
-  TSpiralPoints = array of TSpiralPoint;
+  TIntArray = array of Integer;
 
   TFibonacciVisual = class(TJDVisual)
   private
-    FPoints: TSpiralPoints;
     FPen: TGPPen;
-    FBaseColor: TColorRec;
-    FDirR: Integer;
-    FDirG: Integer;
-    FDirB: Integer;
-    FCurPoint: TGPPointF;
-    FLast: TGPPointF;
-    FCols: TColorArray;
-    FColorFrequency: Integer;
-    FColorTrack: Integer;
-    procedure ShiftColors;
-    procedure SetColorFrequency(const Value: Integer);
-    procedure ResetButtonClick(Sender: TObject);
+    function ShowBoxes: Boolean;
+    function ShowSpiral: Boolean;
   protected
     procedure DoStep; override;
     procedure DoPaint; override;
@@ -57,10 +35,9 @@ type
   public
     constructor Create; override;
     destructor Destroy; override;
-    property ColorFrequency: Integer read FColorFrequency write SetColorFrequency;
-    function Spacing: Currency;
-    function SpeedFactor: Currency;
+    function Canvas: TGPGraphics;
     function Thickness: Currency;
+    function Zoom: Currency;
   end;
 
 implementation
@@ -68,65 +45,67 @@ implementation
 uses
   System.Math;
 
-{ TFibonacciVisual }
+function NextDir(const ADir: TFibDir): TFibDir;
+begin
+  case ADir of
+    fbUp:     Result:= fbLeft;
+    fbLeft:   Result:= fbDown;
+    fbDown:   Result:= fbRight;
+    fbRight:  Result:= fbUp;
+    else      Result:= fbRight;
+  end;
+end;
 
-constructor TFibonacciVisual.Create;
+function FibonacciNums(const ACount: Integer): TIntArray;
 var
   X: Integer;
 begin
+  if ACount < 2 then
+    raise Exception.Create('Input must be at least 2!');
+  SetLength(Result, ACount);
+  Result[0]:= 1;
+  Result[1]:= 1;
+  for X := 2 to ACount-1 do begin
+    Result[X]:= Result[X-1] + Result[X-2]; //The golden rule...
+  end;
+end;
+
+{ TFibonacciVisual }
+
+function TFibonacciVisual.Canvas: TGPGraphics;
+begin
+  Result:= Thread.GPCanvas;
+end;
+
+constructor TFibonacciVisual.Create;
+begin
   inherited;
   VisualName:= 'Fibonacci Spiral';
-  FColorFrequency:= 20;
-  FBaseColor.R:= RandomRange(COLOR_MIN, COLOR_MAX);
-  FBaseColor.G:= RandomRange(COLOR_MIN, COLOR_MAX);
-  FBaseColor.B:= RandomRange(COLOR_MIN, COLOR_MAX);
-  FDirR:= 2;
-  FDirG:= 3;
-  FDirB:= 1;
-  FPen:= TGPPen.Create(MakeColor(FBaseColor.R, FBaseColor.G, FBaseColor.B));
-  FPen.SetWidth(Thickness);
+
+  FPen:= TGPPen.Create(MakeColor(255,255,255));
+  FPen.SetWidth(2.0);
   FPen.SetStartCap(LineCap.LineCapRound);
   FPen.SetEndCap(LineCap.LineCapRound);
-  SetLength(FPoints, POINT_COUNT);
-  for X := 0 to Length(FPoints)-1 do begin
-    FPoints[X].Degrees:= 0;
-    FPoints[X].Distance:= (X+1) * Spacing;
-    FPoints[X].Speed:= (X+1) * SpeedFactor;
-  end;
+
 end;
 
 destructor TFibonacciVisual.Destroy;
 begin
-  SetLength(FPoints, 0);
-  FreeAndNil(FPen);
+
   inherited;
 end;
 
 procedure TFibonacciVisual.CreateControls;
 begin
-  Controls.NewButtonControl('Reset', ResetButtonClick);
-  Controls.NewNumberControl('Thickness', ntFloat, 107.0, 0.1, 1000.0, 2, 0.1);
-  Controls.NewNumberControl('Spacing', ntFloat, 7.0, 0.001, 1000.0, 3, 0.1);
-  Controls.NewNumberControl('Speed', ntFloat, 0.05, 0.025, 5.0, 3, 0.025);
+  Controls.NewNumberControl('Thickness', ntFloat, 3.0, 0.1, 1000.0, 2, 1.0);
+  Controls.NewNumberControl('Zoom', ntFloat, 2.7, 0.001, 1000.0, 3, 0.1);
+  Controls.NewCheckControl('Show Boxes', True);
+  Controls.NewCheckControl('Show Spiral', True);
 end;
 
-procedure TFibonacciVisual.ResetButtonClick(Sender: TObject);
-var
-  X: Integer;
+procedure TFibonacciVisual.DoStep;
 begin
-  for X := 0 to Length(FPoints)-1 do begin
-    FPoints[X].Degrees:= 0;
-  end;
-end;
 
-function TFibonacciVisual.Spacing: Currency;
-begin
-  Result:= TJDVNumberControl(Controls['Spacing']).Value;
-end;
-
-function TFibonacciVisual.SpeedFactor: Currency;
-begin
-  Result:= TJDVNumberControl(Controls['Speed']).Value;
 end;
 
 function TFibonacciVisual.Thickness: Currency;
@@ -134,56 +113,143 @@ begin
   Result:= TJDVNumberControl(Controls['Thickness']).Value;
 end;
 
-procedure TFibonacciVisual.SetColorFrequency(const Value: Integer);
+function TFibonacciVisual.Zoom: Currency;
 begin
-  FColorFrequency := Value;
+  Result:= TJDVNumberControl(Controls['Zoom']).Value;
 end;
 
-procedure TFibonacciVisual.DoStep;
-var
-  X: Integer;
+function TFibonacciVisual.ShowBoxes: Boolean;
 begin
-  for X := 0 to Length(FPoints)-1 do begin
-    FPoints[X].Distance:= (X+1) * Spacing;
-    FPoints[X].Speed:= (X+1) * SpeedFactor;
-    FPoints[X].Degrees:= FPoints[X].Degrees + FPoints[X].Speed;
-  end;
-  Inc(FColorTrack);
-  if FColorTrack >= FColorFrequency then begin
-    FColorTrack:= 0;
-    ShiftColors;
-  end;
+  Result:= TJDVCheckControl(Controls['Show Boxes']).Checked;
 end;
 
-procedure TFibonacciVisual.ShiftColors;
+function TFibonacciVisual.ShowSpiral: Boolean;
 begin
-  if FBaseColor.R >= COLOR_MAX then FDirR:= NegOf(FDirR);
-  if FBaseColor.R <= COLOR_MIN then FDirR:= PosOf(FDirR);
-  if FBaseColor.G >= COLOR_MAX then FDirG:= NegOf(FDirG);
-  if FBaseColor.G <= COLOR_MIN then FDirG:= PosOf(FDirG);
-  if FBaseColor.B >= COLOR_MAX then FDirB:= NegOf(FDirB);
-  if FBaseColor.B <= COLOR_MIN then FDirB:= PosOf(FDirB);
-  FBaseColor.R:= FBaseColor.R + FDirR;
-  FBaseColor.G:= FBaseColor.G + FDirG;
-  FBaseColor.B:= FBaseColor.B + FDirB;
+  Result:= TJDVCheckControl(Controls['Show Spiral']).Checked;
 end;
+
+function Rect(const Left, Top, Right, Bottom: Currency): TGPRectF;
+begin
+  Result.X:= Left;
+  Result.Y:= Top;
+  Result.Width:= Right - Left;
+  Result.Height:= Bottom - Top;
+end;
+
+function Point(const X, Y: Currency): TGPPointF;
+begin
+  Result.X:= X;
+  Result.Y:= Y;
+end;
+
+
+const
+  //MULTIPLIER = 1;
+  SQUARE_COUNT = 50;
+
+
 
 procedure TFibonacciVisual.DoPaint;
 var
+  Arr: TIntArray;
+  Num: Integer;
   X: Integer;
-begin
-  FCols:= ColorFade(FBaseColor.Value, Length(FPoints), COLOR_FADE);
-  FPen.SetWidth(Thickness);
-  for X := 0 to Length(FPoints)-1 do begin
-    FCurPoint:= PointAroundCircle(Thread.CenterPoint, FPoints[X].Distance, FPoints[X].Degrees);
-    if X > 0 then begin
-      FPen.SetColor(MakeColor(FCols[X]));
-      Thread.GPCanvas.DrawLine(FPen, FLast.X, FLast.Y, FCurPoint.X, FCurPoint.Y);
-    end;
-    FLast:= FCurPoint;
+  R, LR, CR: TGPRectF;
+  CP: TGPPointF;
+  Dir: TFibDir;
+  procedure DoDrawRect;
+  var
+    S: String;
+  begin
+    LR:= R;
+    FPen.SetColor(MakeColor(clDkGray));
+    FPen.SetWidth(1.0);
+    if Self.ShowBoxes then
+      Canvas.DrawRectangle(FPen, R);
+    S:= IntToStr(X);
   end;
+  procedure DoDrawCurve;
+  begin
+    CP:= Point(R.X + (R.Width / 2), R.Y + (R.Height / 2));
+    FPen.SetColor(MakeColor(clSkyBlue));
+    FPen.SetWidth(Thickness);
+
+    case Dir of
+      fbUp: begin
+        //Top-right
+        CR.X:= R.X - R.Width;
+        CR.Y:= R.Y;
+        CR.Width:= (R.Width * 2);
+        CR.Height:= (R.Height * 2);
+        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90*3),  (90));
+      end;
+      fbLeft: begin
+        //Top-left
+        CR.X:= R.X;
+        CR.Y:= R.Y;
+        CR.Width:= (R.Width * 2);
+        CR.Height:= (R.Height * 2);
+        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90*2),  (90));
+      end;
+      fbDown: begin
+        //Bottom-left
+        CR.X:= R.X;
+        CR.Y:= (R.Y - R.Height);
+        CR.Width:= (R.Width * 2);
+        CR.Height:= (R.Height * 2);
+        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90),   (90));
+      end;
+      fbRight: begin
+        //Bottom-right
+        CR.X:= (R.X - R.Width);
+        CR.Y:= (R.Y - R.Height);
+        CR.Width:= (R.Width * 2);
+        CR.Height:= (R.Height * 2);
+        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (0),    (90));
+      end;
+    end;
+  end;
+begin
+  Dir:= fbRight;
+  Arr:= FibonacciNums(SQUARE_COUNT);
+  LR:= Rect(Thread.CenterPoint.X, Thread.CenterPoint.Y, Thread.CenterPoint.X+Zoom, Thread.CenterPoint.Y+Zoom);
+
+  for X := 0 to Length(Arr)-1 do begin
+    Num:= Arr[X];
+    Dir:= NextDir(Dir);
+    R.Width:= (Num*Zoom);
+    R.Height:= (Num*Zoom);
+    case Dir of
+      fbUp: begin
+        //Next square on top - right to left
+        R.Y:= LR.Y - (Num*Zoom);
+        R.X:= (LR.X+LR.Height) - (Num*Zoom);
+      end;
+      fbLeft: begin
+        //Next square on left - top to bottom
+        R.Y:= LR.Y;
+        R.X:= LR.X - (Num*Zoom);
+      end;
+      fbDown: begin
+        //Next square on bottom - left to right
+        R.Y:= LR.Y + LR.Height;
+        R.X:= LR.X;
+      end;
+      fbRight: begin
+        //Next square on right - bottom to top
+        R.Y:= (LR.Y+LR.Height) - (Num*Zoom);
+        R.X:= LR.X + LR.Width;
+      end;
+    end;
+    DoDrawRect;
+    if Self.ShowSpiral then
+      DoDrawCurve;
+  end;
+
+  //Canvas.DrawArc(FPen, 100, 100, 200, 200, 90, 90);
+
 end;
 
 initialization
-  //Visuals.RegisterVisualClass(TFibonacciVisual);
+  Visuals.RegisterVisualClass(TFibonacciVisual);
 end.
