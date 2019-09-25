@@ -9,6 +9,8 @@ This project is more of an experiment to play around with, as well as learn a bi
 
 ![Spiral Out](/Images/SS-SpiralOut-1.png)
 
+![Fibonacci Spiral](/Images/FibonacciSpiral.png)
+
 ## Prerequisites / Technology
 
  - Written on Delphi 10.1 Berlin but should work fine on other recent versions
