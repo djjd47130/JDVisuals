@@ -17,6 +17,7 @@ uses
   JD.Visuals, JD.Visuals.Utils, JD.Visuals.Controls;
 
 const
+  DROP_COUNT = 300;
   MAX_DEPTH = 30;
 
 type
@@ -69,7 +70,7 @@ begin
   FPen.SetWidth(7.0);
   FPen.SetStartCap(LineCap.LineCapRound);
   FPen.SetEndCap(LineCap.LineCapRound);
-  SetLength(FDrops, 80);
+  SetLength(FDrops, DROP_COUNT);
   for X := 0 to Length(FDrops)-1 do begin
     FDrops[X].Spread:= 10000;
   end;
@@ -94,9 +95,9 @@ var
 begin
   for X := 0 to Length(FDrops)-1 do begin
 
-    if FDrops[X].VertPos >= (Thread.Height - (FDrops[X].Depth*10)) then begin
+    if FDrops[X].VertPos >= (Thread.Height - (FDrops[X].Depth*12)) then begin
       //Rippling out
-      FDrops[X].Spread:= FDrops[X].Spread + 2.0;
+      FDrops[X].Spread:= FDrops[X].Spread + 2.2;
     end else begin
       //Falling down
       FDrops[X].VertPos:= FDrops[X].VertPos + ((MAX_DEPTH - FDrops[X].Depth) / 2);
@@ -123,10 +124,10 @@ begin
     end else begin
       //Drop ripples through "water"...
       R.Width:= FDrops[X].Spread * 2;
-      R.Height:= FDrops[X].Spread * 1.2;
+      R.Height:= FDrops[X].Spread * 0.8;
       R.X:= FDrops[X].HorzPos - (R.Width / 2);
       R.Y:= FDrops[X].VertPos - (R.Height / 2);
-      FPen.SetWidth((MAX_DEPTH - FDrops[X].Depth)*0.3); //TODO: Make thinner as spread grows
+      FPen.SetWidth((MAX_DEPTH - FDrops[X].Depth)*0.2); //TODO: Make thinner as spread grows
       FPen.SetColor(MakeColor(ColorFade(FDrops[X].Color, -Round(FDrops[X].Spread * 1.5))));
       Thread.GPCanvas.DrawEllipse(FPen, R);
     end;

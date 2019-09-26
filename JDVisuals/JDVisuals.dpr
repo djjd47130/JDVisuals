@@ -5,13 +5,13 @@ uses
   Vcl.Themes,
   Vcl.Styles,
   uVisual in 'uVisual.pas' {frmVisual},
-  JD.FibonacciVisual in '..\Visuals\JD.FibonacciVisual.pas',
+  JD.SpiralOutVisual in '..\Visuals\JD.SpiralOutVisual.pas',
+  JD.FinalFrontierVisual in '..\Visuals\JD.FinalFrontierVisual.pas',
   JD.FinalFrontierVisual.AvgCalc in '..\Visuals\JD.FinalFrontierVisual.AvgCalc.pas',
   JD.FinalFrontierVisual.CpuUsage in '..\Visuals\JD.FinalFrontierVisual.CpuUsage.pas',
-  JD.FinalFrontierVisual in '..\Visuals\JD.FinalFrontierVisual.pas',
-  JD.MatrixVisual in '..\Visuals\JD.MatrixVisual.pas',
   JD.RaindropsVisual in '..\Visuals\JD.RaindropsVisual.pas',
-  JD.SpiralOutVisual in '..\Visuals\JD.SpiralOutVisual.pas';
+  JD.FibonacciVisual in '..\Visuals\JD.FibonacciVisual.pas',
+  JD.MatrixVisual in '..\Visuals\JD.MatrixVisual.pas';
 
 {$R *.res}
 

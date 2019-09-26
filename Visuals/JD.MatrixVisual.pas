@@ -22,14 +22,17 @@ type
 
   TMatrixChar = record
     Char: String;
-    SubChars: TStringArray;
     VertPos: Currency;
     HorzPos: Currency;
+    SubChars: TStringArray;
   end;
+
+  TMatrixChars = array of TMatrixChar;
 
   TMatrixVisual = class(TJDVisual)
   private
     FPen: TGPPen;
+    FChars: TMatrixChars;
   protected
     procedure DoStep; override;
     procedure DoPaint; override;
