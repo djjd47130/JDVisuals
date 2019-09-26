@@ -1,7 +1,7 @@
 unit uVisual;
 
 (*
-  JD Visuals
+  JD Visuals - Visualization engine
   by Jerry Dodge
 
   NOTE: This project makes use of the JEDI Code Library for Delphi.
@@ -31,6 +31,8 @@ unit uVisual;
   - You can optionally override CreateControls if you wish to add user control
   - You must register this class via unit initialization
 
+  Note that I use the "Currency" type often for floats, due to its rounding.
+
 *)
 
 interface
@@ -50,16 +52,17 @@ type
     cboVisual: TComboBox;
     Label1: TLabel;
     btnFullScreen: TButton;
+    View: TJDVisualView;
     procedure tmrMainTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure FormMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure ViewMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure pTopExit(Sender: TObject);
     procedure cboVisualClick(Sender: TObject);
     procedure btnFullScreenClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
-    FView: TJDVisualView;
+    //FView: TJDVisualView;
     function CreateNumberControl(AControl: TJDVNumberControl; const Index: Integer): TPanel;
     function CreateButtonControl(AControl: TJDVButtonControl; const Index: Integer): TPanel;
     function CreateTopPanel: TPanel;
@@ -79,11 +82,6 @@ var
 
 implementation
 
-uses
-  JD.FinalFrontierVisual,
-  JD.SpiralOutVisual,
-  JD.FibonacciVisual;
-
 {$R *.dfm}
 
 procedure TfrmVisual.FormCreate(Sender: TObject);
@@ -96,18 +94,13 @@ begin
   BringToFront;
   Application.ProcessMessages;
   Randomize;
-  FView:= TJDVisualView.Create(Self);
-  FView.Parent:= Self;
-  FView.Align:= alClient;
-  FView.SendToBack;
-  FView.OnMouseMove:= FormMouseMove;
   ShowControls(False);
   PopulateVisualizations;
 end;
 
 procedure TfrmVisual.FormDestroy(Sender: TObject);
 begin
-  FreeAndNil(FView);
+  //FreeAndNil(FView);
 end;
 
 function TfrmVisual.CreateTopPanel: TPanel;
@@ -218,8 +211,8 @@ var
   Ctrls: TJDVisualControls;
 begin
   DestroyControls;
-  if FView.Visual <> nil then begin
-    Ctrls:= FView.Visual.Controls;
+  if View.Visual <> nil then begin
+    Ctrls:= View.Visual.Controls;
     for X := 0 to Ctrls.Count-1 do begin
 
       if Ctrls.Items[X] is TJDVNumberControl then begin
@@ -253,9 +246,9 @@ var
   NC: TJDVNumberControl;
   Edt: TJvSpinEdit;
 begin
-  if FView.Visual <> nil then begin
+  if View.Visual <> nil then begin
     Edt:= TJvSpinEdit(Sender);
-    NC:= TJDVNumberControl(FView.Visual.Controls.Items[Edt.Tag]);
+    NC:= TJDVNumberControl(View.Visual.Controls.Items[Edt.Tag]);
     NC.Value:= Edt.Value;
   end;
 end;
@@ -265,9 +258,9 @@ var
   CC: TJDVCheckControl;
   Chk: TToggleSwitch;
 begin
-  if FView.Visual <> nil then begin
+  if View.Visual <> nil then begin
     Chk:= TToggleSwitch(Sender);
-    CC:= TJDVCheckControl(FView.Visual.Controls.Items[Chk.Tag]);
+    CC:= TJDVCheckControl(View.Visual.Controls.Items[Chk.Tag]);
     CC.Checked:= Chk.State = tssOn;
   end;
 end;
@@ -299,7 +292,7 @@ begin
   try
     if cboVisual.CanFocus then
       cboVisual.SetFocus;
-    FView.VisualIndex:= cboVisual.ItemIndex;
+    View.VisualIndex:= cboVisual.ItemIndex;
     Self.CreateControls;
   except
     //Swallow exception - TODO
@@ -311,7 +304,7 @@ begin
   Invalidate;
 end;
 
-procedure TfrmVisual.FormMouseMove(Sender: TObject; Shift: TShiftState; X,
+procedure TfrmVisual.ViewMouseMove(Sender: TObject; Shift: TShiftState; X,
   Y: Integer);
 begin
   if Y < pTop.Height then

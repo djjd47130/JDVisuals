@@ -15,13 +15,28 @@ object frmVisual: TfrmVisual
   StyleElements = [seFont, seBorder]
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  OnMouseMove = FormMouseMove
+  OnMouseMove = ViewMouseMove
   OnResize = FormResize
   DesignSize = (
     897
     522)
   PixelsPerInch = 96
   TextHeight = 13
+  object View: TJDVisualView
+    Left = 0
+    Top = 0
+    Width = 897
+    Height = 522
+    Align = alClient
+    Color = clBlack
+    ParentColor = False
+    VisualIndex = -1
+    OnMouseMove = ViewMouseMove
+    ExplicitLeft = 80
+    ExplicitTop = 72
+    ExplicitWidth = 729
+    ExplicitHeight = 377
+  end
   object pTop: TPanel
     Left = 0
     Top = 0

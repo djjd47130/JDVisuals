@@ -18,7 +18,8 @@ type
 
 function PointAroundCircle(Center: TGPPointF; Distance: Currency; Degrees: Currency): TGPPointF;
 function IntRange(const Value, Min, Max: Integer): Integer;
-function ColorFade(const ASource: TColor; const ACount: Integer; const Shift: Integer): TColorArray;
+function ColorFade(const ASource: TColor; const ACount: Integer; const Shift: Integer): TColorArray; overload;
+function ColorFade(const ASource: TColor; const Shift: Integer): TColor; overload;
 function MakeColor(const AColor: TColor): Cardinal; overload;
 function PosOf(const AValue: Integer): Integer;
 function NegOf(const AValue: Integer): Integer;
@@ -64,6 +65,16 @@ begin
     B:= IntRange(GetBValue(ASource), 1, 254) + (Shift * X);
     Result[X]:= RGB(R, G, B);
   end;
+end;
+
+function ColorFade(const ASource: TColor; const Shift: Integer): TColor;
+var
+  R, G, B: Byte;
+begin
+  R:= IntRange(GetRValue(ASource), 1, 254) + (Shift);
+  G:= IntRange(GetGValue(ASource), 1, 254) + (Shift);
+  B:= IntRange(GetBValue(ASource), 1, 254) + (Shift);
+  Result:= RGB(R, G, B);
 end;
 
 function MakeColor(const AColor: TColor): Cardinal;
