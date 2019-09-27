@@ -31,9 +31,6 @@ object frmVisual: TfrmVisual
     ParentColor = False
     VisualIndex = 0
     OnMouseMove = ViewMouseMove
-    ExplicitTop = 1
-    ExplicitWidth = 897
-    ExplicitHeight = 522
   end
   object pTop: TPanel
     Left = 0
@@ -48,7 +45,6 @@ object frmVisual: TfrmVisual
     ParentDoubleBuffered = False
     TabOrder = 0
     OnExit = pTopExit
-    ExplicitWidth = 897
     object Panel1: TPanel
       Tag = -1
       Left = 0
@@ -104,7 +100,6 @@ object frmVisual: TfrmVisual
       Caption = 'Enter Full Screen'
       TabOrder = 1
       OnClick = btnFullScreenClick
-      ExplicitLeft = 795
     end
   end
   object tmrMain: TTimer

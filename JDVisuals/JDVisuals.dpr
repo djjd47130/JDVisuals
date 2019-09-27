@@ -12,7 +12,8 @@ uses
   JD.FinalFrontierVisual.CpuUsage in '..\Visuals\JD.FinalFrontierVisual.CpuUsage.pas',
   JD.RaindropsVisual in '..\Visuals\JD.RaindropsVisual.pas',
   JD.FibonacciVisual in '..\Visuals\JD.FibonacciVisual.pas',
-  JD.MatrixVisual in '..\Visuals\JD.MatrixVisual.pas';
+  JD.MatrixVisual in '..\Visuals\JD.MatrixVisual.pas',
+  VisualControls in 'VisualControls.pas';
 
 {$R *.res}
 
