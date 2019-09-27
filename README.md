@@ -20,4 +20,5 @@ This project is more of an experiment to play around with, as well as learn a bi
 
 ## Setup
 
-Currently, this project is very raw, but functional. There is no installer or anything special you need to do, besides having the Jedi library pre-installed as mentioned above. 
+Currently, this project is very raw, but functional. It includes a component package which you must install in order to drop the custom control into your form in the IDE. The application also requires the JEDI component library as mentioned above. 
+
