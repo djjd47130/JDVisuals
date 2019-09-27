@@ -169,7 +169,7 @@ begin
     FCurPoint:= PointAroundCircle(Thread.CenterPoint, FPoints[X].Distance, FPoints[X].Degrees);
     if X > 0 then begin
       FPen.SetColor(MakeColor(FCols[X]));
-      Thread.GPCanvas.DrawLine(FPen, FLast.X, FLast.Y, FCurPoint.X, FCurPoint.Y);
+      GPCanvas.DrawLine(FPen, FLast.X, FLast.Y, FCurPoint.X, FCurPoint.Y);
     end;
     FLast:= FCurPoint;
   end;

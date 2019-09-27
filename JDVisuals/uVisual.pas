@@ -55,14 +55,12 @@ type
     View: TJDVisualView;
     procedure tmrMainTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
     procedure ViewMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure pTopExit(Sender: TObject);
     procedure cboVisualClick(Sender: TObject);
     procedure btnFullScreenClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
   private
-    //FView: TJDVisualView;
     function CreateNumberControl(AControl: TJDVNumberControl; const Index: Integer): TPanel;
     function CreateButtonControl(AControl: TJDVButtonControl; const Index: Integer): TPanel;
     function CreateTopPanel: TPanel;
@@ -96,11 +94,6 @@ begin
   Randomize;
   ShowControls(False);
   PopulateVisualizations;
-end;
-
-procedure TfrmVisual.FormDestroy(Sender: TObject);
-begin
-  //FreeAndNil(FView);
 end;
 
 function TfrmVisual.CreateTopPanel: TPanel;

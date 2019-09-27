@@ -2,8 +2,8 @@ object frmVisual: TfrmVisual
   Left = 0
   Top = 0
   Caption = 'JD Visuals'
-  ClientHeight = 522
-  ClientWidth = 897
+  ClientHeight = 633
+  ClientWidth = 1133
   Color = clBlack
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -14,33 +14,31 @@ object frmVisual: TfrmVisual
   OldCreateOrder = False
   StyleElements = [seFont, seBorder]
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   OnMouseMove = ViewMouseMove
   OnResize = FormResize
   DesignSize = (
-    897
-    522)
+    1133
+    633)
   PixelsPerInch = 96
   TextHeight = 13
   object View: TJDVisualView
     Left = 0
     Top = 0
-    Width = 897
-    Height = 522
+    Width = 1133
+    Height = 633
     Align = alClient
     Color = clBlack
     ParentColor = False
-    VisualIndex = -1
+    VisualIndex = 0
     OnMouseMove = ViewMouseMove
-    ExplicitLeft = 80
-    ExplicitTop = 72
-    ExplicitWidth = 729
-    ExplicitHeight = 377
+    ExplicitTop = 1
+    ExplicitWidth = 897
+    ExplicitHeight = 522
   end
   object pTop: TPanel
     Left = 0
     Top = 0
-    Width = 897
+    Width = 1133
     Height = 46
     Anchors = [akLeft, akTop, akRight]
     BevelOuter = bvNone
@@ -50,6 +48,7 @@ object frmVisual: TfrmVisual
     ParentDoubleBuffered = False
     TabOrder = 0
     OnExit = pTopExit
+    ExplicitWidth = 897
     object Panel1: TPanel
       Tag = -1
       Left = 0
@@ -97,7 +96,7 @@ object frmVisual: TfrmVisual
     end
     object btnFullScreen: TButton
       Tag = -2
-      Left = 795
+      Left = 1031
       Top = 0
       Width = 102
       Height = 46
@@ -105,6 +104,7 @@ object frmVisual: TfrmVisual
       Caption = 'Enter Full Screen'
       TabOrder = 1
       OnClick = btnFullScreenClick
+      ExplicitLeft = 795
     end
   end
   object tmrMain: TTimer

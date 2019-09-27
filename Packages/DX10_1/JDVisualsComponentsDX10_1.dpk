@@ -9,21 +9,21 @@ package JDVisualsComponentsDX10_1;
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS ON}
+{$LOCALSYMBOLS OFF}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION OFF}
+{$OPTIMIZATION ON}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO ON}
+{$REFERENCEINFO OFF}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES ON}
+{$STACKFRAMES OFF}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE DEBUG}
+{$DEFINE RELEASE}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'JD Visual Components DX10.1 Berlin'}
 {$IMPLICITBUILD ON}
@@ -36,7 +36,8 @@ contains
   JD.Visuals.Controls in '..\..\Source\JD.Visuals.Controls.pas',
   JD.Visuals in '..\..\Source\JD.Visuals.pas',
   JD.Visuals.Utils in '..\..\Source\JD.Visuals.Utils.pas',
-  JD.Visuals.Install in 'JD.Visuals.Install.pas';
+  JD.Visuals.Install in 'JD.Visuals.Install.pas',
+  JD.SpiralOutVisual in '..\..\Visuals\JD.SpiralOutVisual.pas';
 
 end.
 

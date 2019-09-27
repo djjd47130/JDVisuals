@@ -4,6 +4,7 @@ uses
   Vcl.Forms,
   Vcl.Themes,
   Vcl.Styles,
+  JD.Visuals,
   uVisual in 'uVisual.pas' {frmVisual},
   JD.SpiralOutVisual in '..\Visuals\JD.SpiralOutVisual.pas',
   JD.FinalFrontierVisual in '..\Visuals\JD.FinalFrontierVisual.pas',

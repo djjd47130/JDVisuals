@@ -33,7 +33,6 @@ type
   public
     constructor Create; override;
     destructor Destroy; override;
-    function Canvas: TGPGraphics;
     function Thickness: Currency;
     function Zoom: Currency;
     function Count: Integer;
@@ -89,11 +88,6 @@ begin
 end;
 
 { TFibonacciVisual }
-
-function TFibonacciVisual.Canvas: TGPGraphics;
-begin
-  Result:= Thread.GPCanvas;
-end;
 
 constructor TFibonacciVisual.Create;
 begin
@@ -165,7 +159,7 @@ var
     FPen.SetColor(MakeColor(clDkGray));
     FPen.SetWidth(1.0);
     if ShowBoxes then
-      Canvas.DrawRectangle(FPen, R);
+      GPCanvas.DrawRectangle(FPen, R);
   end;
   procedure DoDrawCurve;
   begin
@@ -185,25 +179,25 @@ var
         //Top-right
         CR.X:= R.X - R.Width;
         CR.Y:= R.Y;
-        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90*3),  (90));
+        GPCanvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90*3),  (90));
       end;
       fbLeft: begin
         //Top-left
         CR.X:= R.X;
         CR.Y:= R.Y;
-        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90*2),  (90));
+        GPCanvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90*2),  (90));
       end;
       fbDown: begin
         //Bottom-left
         CR.X:= R.X;
         CR.Y:= (R.Y - R.Height);
-        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90),   (90));
+        GPCanvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (90),   (90));
       end;
       fbRight: begin
         //Bottom-right
         CR.X:= (R.X - R.Width);
         CR.Y:= (R.Y - R.Height);
-        Canvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (0),    (90));
+        GPCanvas.DrawArc(FPen, CR.X,  CR.Y, CR.Width,   CR.Height,  (0),    (90));
       end;
     end;
   end;

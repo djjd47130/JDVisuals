@@ -357,7 +357,7 @@ begin
     lf.lfHeight:= 22;
     lf.lfCharSet:= DEFAULT_CHARSET;
     lf.lfFaceName:= 'Consolas';
-    FFont:= TGPFont.Create(Thread.Canvas.Handle, PLogFont(@lf));
+    FFont:= TGPFont.Create(Canvas.Handle, PLogFont(@lf));
   end;
 end;
 
@@ -375,7 +375,7 @@ procedure TFinalFrontierVisual.DrawStar(AStar: TStar);
 begin
   FTailPen.SetColor(AStar.FColor);
   FTailPen.SetWidth(AStar.FSize);
-  Thread.GPCanvas.DrawLine(FTailPen, AStar.FPos, AStar.FTailPos);
+  GPCanvas.DrawLine(FTailPen, AStar.FPos, AStar.FTailPos);
 end;
 
 procedure TFinalFrontierVisual.EnsureStarCount;
@@ -455,7 +455,7 @@ begin
     R.Y:= 0;
     R.Width:= Thread.Width;
     R.Height:= Thread.Height;
-    Thread.GPCanvas.MeasureString(S, Length(S), FFont, R, nil, R2);
+    GPCanvas.MeasureString(S, Length(S), FFont, R, nil, R2);
 
     Pt.X:= 5;
     Pt.Y:= Thread.Height - R2.Height - 5;
@@ -480,7 +480,7 @@ begin
       end;
     end;
     }
-    Thread.GPCanvas.DrawString(S, Length(S), FFont, Pt, nil, FTextBrush);
+    GPCanvas.DrawString(S, Length(S), FFont, Pt, nil, FTextBrush);
   end;
 end;
 

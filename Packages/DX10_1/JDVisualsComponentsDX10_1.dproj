@@ -177,6 +177,7 @@
         <DCCReference Include="..\..\Source\JD.Visuals.pas"/>
         <DCCReference Include="..\..\Source\JD.Visuals.Utils.pas"/>
         <DCCReference Include="JD.Visuals.Install.pas"/>
+        <DCCReference Include="..\..\Visuals\JD.SpiralOutVisual.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>
@@ -226,6 +227,12 @@
                 </DeployFile>
                 <DeployFile LocalName="$(BDS)\Redist\osx32\libcgsqlite3.dylib" Class="DependencyModule">
                     <Platform Name="OSX32">
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="C:\Users\Public\Documents\Embarcadero\Studio\18.0\Bpl\JDVisualsComponentsDX10_1.bpl" Configuration="Release" Class="ProjectOutput">
+                    <Platform Name="Win32">
+                        <RemoteName>JDVisualsComponentsDX10_1.bpl</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

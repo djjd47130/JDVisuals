@@ -98,6 +98,7 @@ begin
     if FDrops[X].VertPos >= (Thread.Height - (FDrops[X].Depth*12)) then begin
       //Rippling out
       FDrops[X].Spread:= FDrops[X].Spread + 2.2;
+      //TODO: The further away, the smaller the max should be...
     end else begin
       //Falling down
       FDrops[X].VertPos:= FDrops[X].VertPos + ((MAX_DEPTH - FDrops[X].Depth) / 2);
@@ -120,7 +121,7 @@ begin
       //Drop falling...
       FPen.SetColor(MakeColor(FDrops[X].Color));
       FPen.SetWidth((MAX_DEPTH - FDrops[X].Depth)*0.3);
-      Thread.GPCanvas.DrawLine(FPen, FDrops[X].HorzPos, FDrops[X].VertPos, FDrops[X].HorzPos+1, FDrops[X].VertPos+1);
+      GPCanvas.DrawLine(FPen, FDrops[X].HorzPos, FDrops[X].VertPos, FDrops[X].HorzPos+1, FDrops[X].VertPos+1);
     end else begin
       //Drop ripples through "water"...
       R.Width:= FDrops[X].Spread * 2;
@@ -129,7 +130,7 @@ begin
       R.Y:= FDrops[X].VertPos - (R.Height / 2);
       FPen.SetWidth((MAX_DEPTH - FDrops[X].Depth)*0.2); //TODO: Make thinner as spread grows
       FPen.SetColor(MakeColor(ColorFade(FDrops[X].Color, -Round(FDrops[X].Spread * 1.5))));
-      Thread.GPCanvas.DrawEllipse(FPen, R);
+      GPCanvas.DrawEllipse(FPen, R);
     end;
   end;
 end;

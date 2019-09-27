@@ -22,6 +22,8 @@ type
     FThread: TJDVisualsThread;
     FControls: TJDVisualControls;
     FVisualName: String;
+    function GetCanvas: TCanvas;
+    function GetGPCanvas: TGPGraphics;
   protected
     procedure SetThread(const Value: TJDVisualsThread); virtual;
     procedure DoStep; virtual; abstract;
@@ -33,6 +35,8 @@ type
     property Thread: TJDVisualsThread read FThread write SetThread;
     property Controls: TJDVisualControls read FControls;
     property VisualName: String read FVisualName write FVisualName;
+    property Canvas: TCanvas read GetCanvas;
+    property GPCanvas: TGPGraphics read GetGPCanvas;
   end;
 
   TJDVOnGetDims = procedure(Sender: TJDVisualsThread; var Width, Height: Integer) of object;
@@ -165,6 +169,22 @@ destructor TJDVisual.Destroy;
 begin
   FreeAndNil(FControls);
   inherited;
+end;
+
+function TJDVisual.GetCanvas: TCanvas;
+begin
+  if FThread <> nil then
+    Result:= FThread.Canvas
+  else
+    Result:= nil;
+end;
+
+function TJDVisual.GetGPCanvas: TGPGraphics;
+begin
+  if FThread <> nil then
+    Result:= FThread.GPCanvas
+  else
+    Result:= nil;
 end;
 
 procedure TJDVisual.SetThread(const Value: TJDVisualsThread);
