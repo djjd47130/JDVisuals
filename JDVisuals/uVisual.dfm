@@ -29,7 +29,7 @@ object frmVisual: TfrmVisual
     Align = alClient
     Color = clBlack
     ParentColor = False
-    VisualIndex = 0
+    VisualIndex = 1
     OnMouseMove = ViewMouseMove
   end
   object pTop: TPanel

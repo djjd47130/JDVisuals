@@ -1,17 +1,17 @@
 unit uVisual;
 
 (*
-  JD Visuals - Visualization engine
+  JD Visuals - Visualization engine for Delphi
   by Jerry Dodge
-
-  NOTE: This project makes use of the JEDI Code Library for Delphi.
 
   OpenSource on GitHub: https://github.com/djjd47130/JDVisuals
 
+  NOTE: This project makes use of the JEDI Code Library for Delphi.
+
   This application displays various different visuals based on customized
-  visual code. There's a primary thread which is used to encapsulate the
-  animation of any given visual, and then inherited objects which actually
-  implement each possible visualization.
+  visual code. There's a primary component using a thread which is used to
+  encapsulate the animation of any given visual, and then inherited objects
+  which actually implement each possible visualization.
 
   Each visual is implemented in its own unit - for example JD.SpiralOutVisual.
   Each visual also automatically registers itself in a global list which can
