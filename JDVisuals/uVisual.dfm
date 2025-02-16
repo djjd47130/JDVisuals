@@ -29,8 +29,9 @@ object frmVisual: TfrmVisual
     Align = alClient
     Color = clBlack
     ParentColor = False
-    VisualIndex = 1
+    VisualIndex = -1
     OnMouseMove = ViewMouseMove
+    ExplicitLeft = 3
   end
   object pTop: TPanel
     Left = 0
@@ -59,7 +60,7 @@ object frmVisual: TfrmVisual
         Left = 3
         Top = 1
         Width = 147
-        Height = 15
+        Height = 12
         Margins.Top = 1
         Align = alClient
         Caption = 'Visualization'

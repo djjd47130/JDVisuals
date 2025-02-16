@@ -4,13 +4,20 @@ unit VisualControls;
   Visual Controls - Encapsulates UI panel for user to modify visual controls
 *)
 
+{ $DEFINE USE_JEDI}
+
 interface
 
 uses
   System.Classes,
   Vcl.Controls, Vcl.ExtCtrls, Vcl.Graphics,
   Vcl.StdCtrls, Vcl.Mask,
-  JvExMask, JvSpin, Vcl.WinXCtrls,
+  {$IFDEF USE_JEDI}
+  JvExMask, JvSpin,
+  {$ELSE}
+  RzSpnEdt,
+  {$ENDIF}
+  Vcl.WinXCtrls,
   JD.Visuals,
   JD.Visuals.Controls;
 
@@ -53,18 +60,26 @@ end;
 function CreateNumberControl(AOwner: TWinControl; AControl: TJDVNumberControl; OnChanged: TNotifyEvent; const Index: Integer): TPanel;
 var
   Lbl: TLabel;
+  {$IFDEF USE_JEDI}
   Edt: TJvSpinEdit;
+  {$ELSE}
+  Edt: TRzSpinEdit;
+  {$ENDIF}
 begin
   Result:= CreateTopPanel(AOwner);
   Result.Tag:= Index;
-
+  {$IFDEF USE_JEDI}
   Edt:= TJvSpinEdit.Create(Result);
+  {$ELSE}
+  Edt:= TRzSpinEdit.Create(Result);
+  {$ENDIF}
   Edt.Parent:= Result;
   Edt.Align:= alBottom;
   Edt.AlignWithMargins:= True;
   Edt.Font.Size:= 10;
-  Edt.ButtonKind:= bkStandard;
   Edt.Height:= 24;
+  {$IFDEF USE_JEDI}
+  Edt.ButtonKind:= bkStandard;
   case AControl.NumberType of
     ntInteger: Edt.ValueType:= TValueType.vtInteger;
     ntFloat: Edt.ValueType:= TValueType.vtFloat;
@@ -72,6 +87,15 @@ begin
   Edt.MinValue:= AControl.Min;
   Edt.MaxValue:= AControl.Max;
   Edt.Decimal:= AControl.Digits;
+  {$ELSE}
+  case AControl.NumberType of
+    ntInteger: Edt.IntegersOnly:= True;
+    ntFloat: Edt.IntegersOnly:= False;
+  end;
+  Edt.Min:= AControl.Min;
+  Edt.Max:= AControl.Max;
+  Edt.Decimals:= AControl.Digits;
+  {$ENDIF}
   Edt.Increment:= AControl.Interval;
   Edt.Value:= AControl.Value;
   Edt.Tag:= Index;
@@ -208,10 +232,18 @@ end;
 procedure TVisualControlPanel.NumberControlChanged(Sender: TObject);
 var
   NC: TJDVNumberControl;
+  {$IFDEF USE_JEDI}
   Edt: TJvSpinEdit;
+  {$ELSE}
+  Edt: TRzSpinEdit;
+  {$ENDIF}
 begin
   if FVisuals.Visual <> nil then begin
+    {$IFDEF USE_JEDI}
     Edt:= TJvSpinEdit(Sender);
+    {$ELSE}
+    Edt:= TRzSpinEdit(Sender);
+    {$ENDIF}
     NC:= TJDVNumberControl(FVisuals.Visual.Controls.Items[Edt.Tag]);
     NC.Value:= Edt.Value;
   end;
