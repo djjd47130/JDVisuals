@@ -5,6 +5,8 @@ unit JD.MatrixVisual;
   This visual is in raw beginning stages, and is far from ready. This visual
   will simulate the "Matrix" green characters falling down the screen and
   leaving a trail of other characters...
+
+  UPDATE: I KNOW I WROTE THIS, WHAT HAPPENED TO IT?!
 *)
 
 interface

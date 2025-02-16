@@ -2,8 +2,8 @@ object frmVisual: TfrmVisual
   Left = 0
   Top = 0
   Caption = 'JD Visuals'
-  ClientHeight = 633
-  ClientWidth = 1133
+  ClientHeight = 456
+  ClientWidth = 859
   Color = clBlack
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -17,15 +17,15 @@ object frmVisual: TfrmVisual
   OnMouseMove = ViewMouseMove
   OnResize = FormResize
   DesignSize = (
-    1133
-    633)
+    859
+    456)
   PixelsPerInch = 96
   TextHeight = 13
   object View: TJDVisualView
     Left = 0
     Top = 0
-    Width = 1133
-    Height = 633
+    Width = 859
+    Height = 456
     Align = alClient
     Color = clBlack
     ParentColor = False
@@ -35,7 +35,7 @@ object frmVisual: TfrmVisual
   object pTop: TPanel
     Left = 0
     Top = 0
-    Width = 1133
+    Width = 859
     Height = 46
     Anchors = [akLeft, akTop, akRight]
     BevelOuter = bvNone
@@ -59,7 +59,7 @@ object frmVisual: TfrmVisual
         Left = 3
         Top = 1
         Width = 147
-        Height = 15
+        Height = 12
         Margins.Top = 1
         Align = alClient
         Caption = 'Visualization'
@@ -92,7 +92,7 @@ object frmVisual: TfrmVisual
     end
     object btnFullScreen: TButton
       Tag = -2
-      Left = 1031
+      Left = 757
       Top = 0
       Width = 102
       Height = 46
