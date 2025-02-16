@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{7FB92058-CAB0-4F20-A91F-7974ECD967C1}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Packages\DX10_1\JDVisualsComponentsDX10_1.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="JDVisuals\JDVisuals.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="JDVisualsComponentsDX10_1">
+        <MSBuild Projects="Packages\DX10_1\JDVisualsComponentsDX10_1.dproj"/>
+    </Target>
+    <Target Name="JDVisualsComponentsDX10_1:Clean">
+        <MSBuild Projects="Packages\DX10_1\JDVisualsComponentsDX10_1.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JDVisualsComponentsDX10_1:Make">
+        <MSBuild Projects="Packages\DX10_1\JDVisualsComponentsDX10_1.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="JDVisuals">
+        <MSBuild Projects="JDVisuals\JDVisuals.dproj"/>
+    </Target>
+    <Target Name="JDVisuals:Clean">
+        <MSBuild Projects="JDVisuals\JDVisuals.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JDVisuals:Make">
+        <MSBuild Projects="JDVisuals\JDVisuals.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="JDVisualsComponentsDX10_1;JDVisuals"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="JDVisualsComponentsDX10_1:Clean;JDVisuals:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="JDVisualsComponentsDX10_1:Make;JDVisuals:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
