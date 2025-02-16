@@ -94,9 +94,12 @@ begin
   FControls.Visuals:= View;
   ShowControls(False);
   PopulateVisualizations;
+  View.Align:= alClient;
 end;
 
 procedure TfrmVisual.btnFullScreenClick(Sender: TObject);
+var
+  M: TMonitor;
 begin
   case Self.BorderStyle of
     bsNone: begin
@@ -109,13 +112,34 @@ begin
     bsSizeable: begin
       Self.BorderStyle:= bsNone;
       Self.FormStyle:= TFormStyle.fsStayOnTop;
+
+      {
       Self.Left:= 0;
       Self.Width:= Screen.Width;
       Self.Top:= 0;
       Self.Height:= Screen.Height;
+      }
+
+      //TODO: Current monitor...
+      M:= Screen.MonitorFromWindow(Self.Handle, mdNearest);
+      Left:= M.Left;
+      Top:= M.Top;
+      Width:= M.Width;
+      Height:= M.Height;
+
+      {
+      //TODO: All monitors....
+      Self.Left:= Screen.DesktopLeft;
+      Self.Top:= Screen.DesktopTop;
+      Self.Width:= Screen.DesktopWidth;
+      Self.Height:= Screen.DesktopHeight;
+      }
+
       btnFullScreen.Caption:= 'Exit Full Screen';
     end;
   end;
+  //TODO: Reset visual...
+
 end;
 
 procedure TfrmVisual.cboVisualClick(Sender: TObject);

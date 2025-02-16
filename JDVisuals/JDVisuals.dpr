@@ -22,7 +22,7 @@ uses
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Windows10 Dark');
+  TStyleManager.TrySetStyle('Cobalt XEMedia');
   Application.Title := 'JD Visuals';
   Application.CreateForm(TfrmVisual, frmVisual);
   Application.Run;
