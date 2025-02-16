@@ -16,19 +16,33 @@ type
     function Value: TColor;
   end;
 
+function CreateGPCanvas(const DC: HDC): TGPGraphics;
+
 function PointAroundCircle(Center: TGPPointF; Distance: Currency; Degrees: Currency): TGPPointF;
 function IntRange(const Value, Min, Max: Integer): Integer;
 function ColorFade(const ASource: TColor; const ACount: Integer; const Shift: Integer): TColorArray; overload;
 function ColorFade(const ASource: TColor; const Shift: Integer): TColor; overload;
 function MakeColor(const AColor: TColor): Cardinal; overload;
-function PosOf(const AValue: Integer): Integer;
-function NegOf(const AValue: Integer): Integer;
+function PosOf(const AValue: Integer): Integer; overload;
+function NegOf(const AValue: Integer): Integer; overload;
+function PosOf(const AValue: Currency): Currency; overload;
+function NegOf(const AValue: Currency): Currency; overload;
 
 function SetThreadDescription(hThread: THandle; lpThreadDescription: WideString): HRESULT; stdcall;
   external kernel32 name 'SetThreadDescription';
 
 
 implementation
+
+
+function CreateGPCanvas(const DC: HDC): TGPGraphics;
+begin
+  Result:= TGPGraphics.Create(DC);
+  Result.SetInterpolationMode(InterpolationMode.InterpolationModeHighQuality);
+  Result.SetSmoothingMode(SmoothingMode.SmoothingModeHighQuality);
+  Result.SetCompositingQuality(CompositingQuality.CompositingQualityHighQuality);
+end;
+
 
 //Calculates an absolute pixel point based on a center point, distance (radius), and degrees.
 //This is perhaps the most complicated part of the whole thing. Someone wrote this
@@ -90,6 +104,20 @@ begin
 end;
 
 function NegOf(const AValue: Integer): Integer;
+begin
+  Result:= AValue;
+  if Result > 0 then
+    Result:= -Result;
+end;
+
+function PosOf(const AValue: Currency): Currency;
+begin
+  Result:= AValue;
+  if Result < 0 then
+    Result:= -Result;
+end;
+
+function NegOf(const AValue: Currency): Currency;
 begin
   Result:= AValue;
   if Result > 0 then

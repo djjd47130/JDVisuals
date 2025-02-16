@@ -37,7 +37,14 @@ contains
   JD.Visuals in '..\..\Source\JD.Visuals.pas',
   JD.Visuals.Utils in '..\..\Source\JD.Visuals.Utils.pas',
   JD.Visuals.Install in 'JD.Visuals.Install.pas',
-  JD.SpiralOutVisual in '..\..\Visuals\JD.SpiralOutVisual.pas';
+  JD.SpiralOutVisual in '..\..\Visuals\JD.SpiralOutVisual.pas',
+  JD.FibonacciVisual in '..\..\Visuals\JD.FibonacciVisual.pas',
+  JD.FinalFrontierVisual.AvgCalc in '..\..\Visuals\JD.FinalFrontierVisual.AvgCalc.pas',
+  JD.FinalFrontierVisual.CpuUsage in '..\..\Visuals\JD.FinalFrontierVisual.CpuUsage.pas',
+  JD.FinalFrontierVisual in '..\..\Visuals\JD.FinalFrontierVisual.pas',
+  JD.MatrixVisual in '..\..\Visuals\JD.MatrixVisual.pas',
+  JD.RaindropsVisual in '..\..\Visuals\JD.RaindropsVisual.pas',
+  JD.Visuals.DM in '..\..\Source\JD.Visuals.DM.pas' {dmJDVisualsScript: TDataModule};
 
 end.
 

@@ -13,14 +13,16 @@ uses
   JD.RaindropsVisual in '..\Visuals\JD.RaindropsVisual.pas',
   JD.FibonacciVisual in '..\Visuals\JD.FibonacciVisual.pas',
   JD.MatrixVisual in '..\Visuals\JD.MatrixVisual.pas',
-  VisualControls in 'VisualControls.pas';
+  VisualControls in 'VisualControls.pas',
+  JD.ChessboardVisual in '..\Visuals\JD.ChessboardVisual.pas',
+  JD.CircleTraceVisual in '..\Visuals\JD.CircleTraceVisual.pas';
 
 {$R *.res}
 
 begin
   Application.Initialize;
   Application.MainFormOnTaskbar := True;
-  TStyleManager.TrySetStyle('Cobalt XEMedia');
+  TStyleManager.TrySetStyle('Windows10 Dark');
   Application.Title := 'JD Visuals';
   Application.CreateForm(TfrmVisual, frmVisual);
   Application.Run;

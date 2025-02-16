@@ -201,6 +201,7 @@ begin
   FCanvas:= ACanvas;
   FLock:= TCriticalSection.Create;
   FStepDelay:= 15;
+  Self.Priority:= TThreadPriority.tpHighest;
 end;
 
 destructor TJDVisualsThread.Destroy;
@@ -296,10 +297,7 @@ end;
 
 function TJDVisualsThread.CreateCanvas: TGPGraphics;
 begin
-  Result:= TGPGraphics.Create(FCanvas.Handle);
-  Result.SetInterpolationMode(InterpolationMode.InterpolationModeHighQuality);
-  Result.SetSmoothingMode(SmoothingMode.SmoothingModeHighQuality);
-  Result.SetCompositingQuality(CompositingQuality.CompositingQualityHighQuality);
+  Result:= CreateGPCanvas(FCanvas.Handle);
 end;
 
 procedure TJDVisualsThread.PaintToCanvas;
@@ -318,7 +316,12 @@ begin
       try
         FCanvas.Lock;
         try
+          //TODO: Implement a sort of "flowfield" to "remember" background
+          //  and make pixels "move" to create some sort of effect
+
+          //Paint the foreground
           FVisual.DoPaint;
+
         finally
           FCanvas.Unlock;
         end;

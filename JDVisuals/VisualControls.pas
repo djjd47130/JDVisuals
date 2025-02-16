@@ -4,22 +4,13 @@ unit VisualControls;
   Visual Controls - Encapsulates UI panel for user to modify visual controls
 *)
 
-{$DEFINE USE_RAIZE}
-{.DEFINE USE_JEDI}
-
 interface
 
 uses
   System.Classes,
   Vcl.Controls, Vcl.ExtCtrls, Vcl.Graphics,
   Vcl.StdCtrls, Vcl.Mask,
-  {$IFDEF USE_JEDI}
-  JvExMask, JvSpin,
-  {$ENDIF}
-  Vcl.WinXCtrls,
-  {$IFDEF USE_RAIZE}
-  RzSpnEdt,
-  {$ENDIF}
+  JvExMask, JvSpin, Vcl.WinXCtrls,
   JD.Visuals,
   JD.Visuals.Controls;
 
@@ -62,35 +53,18 @@ end;
 function CreateNumberControl(AOwner: TWinControl; AControl: TJDVNumberControl; OnChanged: TNotifyEvent; const Index: Integer): TPanel;
 var
   Lbl: TLabel;
-  {$IFDEF USE_JEDI}
   Edt: TJvSpinEdit;
-  {$ELSE}
-    {$IFDEF USE_RAIZE}
-  Edt: TRzSpinEdit;
-    {$ELSE}
-  Edt: TSpinEdit; //TODO
-    {$ENDIF}
-  {$ENDIF}
 begin
   Result:= CreateTopPanel(AOwner);
   Result.Tag:= Index;
 
-  {$IFDEF USE_JEDI}
   Edt:= TJvSpinEdit.Create(Result);
-  {$ELSE}
-    {$IFDEF USE_RAIZE}
-  Edt:= TRzSpinEdit.Create(Result);
-    {$ELSE}
-  Edt:= TSpinEdit.Create(Result); //TODO
-    {$ENDIF}
-  {$ENDIF}
   Edt.Parent:= Result;
   Edt.Align:= alBottom;
   Edt.AlignWithMargins:= True;
   Edt.Font.Size:= 10;
-  Edt.Height:= 24;
-  {$IFDEF USE_JEDI}
   Edt.ButtonKind:= bkStandard;
+  Edt.Height:= 24;
   case AControl.NumberType of
     ntInteger: Edt.ValueType:= TValueType.vtInteger;
     ntFloat: Edt.ValueType:= TValueType.vtFloat;
@@ -98,20 +72,6 @@ begin
   Edt.MinValue:= AControl.Min;
   Edt.MaxValue:= AControl.Max;
   Edt.Decimal:= AControl.Digits;
-  {$ELSE}
-    {$IFDEF USE_RAIZE}
-  case AControl.NumberType of
-    ntInteger: Edt.IntegersOnly:= True;
-    ntFloat: Edt.IntegersOnly:= False;
-  end;
-  Edt.Min:= AControl.Min;
-  Edt.Max:= AControl.Max;
-  Edt.Decimals:= AControl.Digits;
-    {$ELSE}
-  //TODO...
-    {$ENDIF}
-  {$ENDIF}
-
   Edt.Increment:= AControl.Interval;
   Edt.Value:= AControl.Value;
   Edt.Tag:= Index;
@@ -248,26 +208,10 @@ end;
 procedure TVisualControlPanel.NumberControlChanged(Sender: TObject);
 var
   NC: TJDVNumberControl;
-  {$IFDEF USE_JEDI}
   Edt: TJvSpinEdit;
-  {$ELSE}
-    {$IFDEF USE_RAIZE}
-  Edt: TRzSpinEdit;
-    {$ELSE}
-  Edt: TSpinEdit; //TODO
-    {$ENDIF}
-  {$ENDIF}
 begin
   if FVisuals.Visual <> nil then begin
-    {$IFDEF USE_JEDI}
     Edt:= TJvSpinEdit(Sender);
-    {$ELSE}
-      {$IFDEF USE_RAIZE}
-    Edt:= TRzSpinEdit(Sender);
-      {$ELSE}
-    Edt:= TSpinEdit(Sender); //TODO
-      {$ENDIF}
-    {$ENDIF}
     NC:= TJDVNumberControl(FVisuals.Visual.Controls.Items[Edt.Tag]);
     NC.Value:= Edt.Value;
   end;

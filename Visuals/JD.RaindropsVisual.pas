@@ -18,7 +18,7 @@ uses
 
 const
   DROP_COUNT = 300;
-  MAX_DEPTH = 30;
+  MAX_DEPTH = 20;
 
 type
   TDrop = record
@@ -97,7 +97,7 @@ begin
 
     if FDrops[X].VertPos >= (Thread.Height - (FDrops[X].Depth*12)) then begin
       //Rippling out
-      FDrops[X].Spread:= FDrops[X].Spread + 2.2;
+      FDrops[X].Spread:= FDrops[X].Spread + 1.75;
       //TODO: The further away, the smaller the max should be...
     end else begin
       //Falling down

@@ -9,6 +9,9 @@
         <Projects Include="..\JDVisuals\JDVisuals.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\..\..\JD\Delphi\CalcChessBoard\CalcChessBoard.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="JDVisuals:Make">
         <MSBuild Projects="..\JDVisuals\JDVisuals.dproj" Targets="Make"/>
     </Target>
+    <Target Name="CalcChessBoard">
+        <MSBuild Projects="..\..\..\JD\Delphi\CalcChessBoard\CalcChessBoard.dproj"/>
+    </Target>
+    <Target Name="CalcChessBoard:Clean">
+        <MSBuild Projects="..\..\..\JD\Delphi\CalcChessBoard\CalcChessBoard.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="CalcChessBoard:Make">
+        <MSBuild Projects="..\..\..\JD\Delphi\CalcChessBoard\CalcChessBoard.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="JDVisualsComponentsDX10_1;JDVisuals"/>
+        <CallTarget Targets="JDVisualsComponentsDX10_1;JDVisuals;CalcChessBoard"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="JDVisualsComponentsDX10_1:Clean;JDVisuals:Clean"/>
+        <CallTarget Targets="JDVisualsComponentsDX10_1:Clean;JDVisuals:Clean;CalcChessBoard:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="JDVisualsComponentsDX10_1:Make;JDVisuals:Make"/>
+        <CallTarget Targets="JDVisualsComponentsDX10_1:Make;JDVisuals:Make;CalcChessBoard:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

@@ -1,17 +1,17 @@
 unit uVisual;
 
 (*
-  JD Visuals - Visualization engine
+  JD Visuals - Visualization engine for Delphi
   by Jerry Dodge
-
-  NOTE: This project makes use of the JEDI Code Library for Delphi.
 
   OpenSource on GitHub: https://github.com/djjd47130/JDVisuals
 
+  NOTE: This project makes use of the JEDI Code Library for Delphi.
+
   This application displays various different visuals based on customized
-  visual code. There's a primary thread which is used to encapsulate the
-  animation of any given visual, and then inherited objects which actually
-  implement each possible visualization.
+  visual code. There's a primary component using a thread which is used to
+  encapsulate the animation of any given visual, and then inherited objects
+  which actually implement each possible visualization.
 
   Each visual is implemented in its own unit - for example JD.SpiralOutVisual.
   Each visual also automatically registers itself in a global list which can
@@ -32,6 +32,10 @@ unit uVisual;
   - You must register this class via unit initialization
 
   Note that I use the "Currency" type often for floats, due to its rounding.
+  When I was using Single or Double, accuracy was terrible, and leaving it
+  running overnight caused it to go all out of whack. But since
+  Currency is technically an integer with the decimal offset by 4 digits,
+  it naturally has integer precision.
 
 *)
 

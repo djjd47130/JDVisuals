@@ -11,13 +11,13 @@ uses
   JD.FinalFrontierVisual.AvgCalc, JD.FinalFrontierVisual.CpuUsage;
 
 const
-  SPEED_UP = 0.00046; //Speed up time
+  SPEED_UP = 0.00047; //Speed up time
   SPEED_CHANGE_FACTOR = 0.7; //+ or - Amount
-  DEF_STAR_COUNT = 2500; //Default star count
-  DEF_ACCEL = 1.2; //Default acceleration
-  DEF_TAIL_LEN = 2.2; //Default tail length
+  DEF_STAR_COUNT = 2700; //Default star count
+  DEF_ACCEL = 1.7; //Default acceleration
+  DEF_TAIL_LEN = 2.7; //Default tail length
   BOUND_BUFF = 700; //Off-screen area allowed
-  SIZE_MULTIPLIER = 0.0035; //Initial size of newly spawned stars
+  SIZE_MULTIPLIER = 0.0037; //Initial size of newly spawned stars
 
 type
   TStar = class;
