@@ -25,12 +25,12 @@ object frmVisual: TfrmVisual
     Left = 0
     Top = 0
     Width = 969
-    Height = 409
+    Height = 465
     Align = alTop
-    Color = clBlack
-    ParentColor = False
-    VisualIndex = 0
+    Anchors = [akLeft, akTop, akRight, akBottom]
+    Visual = RaindropVisual1
     OnMouseMove = ViewMouseMove
+    ExplicitTop = 1
   end
   object pTop: TPanel
     Left = 0
@@ -92,20 +92,81 @@ object frmVisual: TfrmVisual
     end
     object btnFullScreen: TButton
       Tag = -2
-      Left = 867
+      Left = 840
       Top = 0
-      Width = 102
+      Width = 129
       Height = 46
+      Action = actFullScreen
       Align = alRight
-      Caption = 'Enter Full Screen'
+      DropDownMenu = popFullScreen
+      Style = bsSplitButton
       TabOrder = 1
-      OnClick = btnFullScreenClick
     end
   end
   object tmrMain: TTimer
+    Enabled = False
     Interval = 25
     OnTimer = tmrMainTimer
-    Left = 24
-    Top = 432
+    Left = 32
+    Top = 488
+  end
+  object Acts: TActionList
+    Left = 88
+    Top = 488
+    object actFullScreen: TAction
+      Category = 'View'
+      Caption = 'Enter Full Screen'
+      ShortCut = 122
+      OnExecute = btnFullScreenClick
+    end
+  end
+  object FibonacciVisual1: TFibonacciVisual
+    Thickness = 8.000000000000000000
+    Zoom = 0.100000000000000000
+    Count = 30
+    ShowBoxes = True
+    ShowSpiral = True
+    Left = 248
+    Top = 488
+  end
+  object FinalFrontierVisual1: TFinalFrontierVisual
+    Speed = 0.473437219858169500
+    MinSpeed = 0.000199999994947575
+    MaxSpeed = 1.000000000000000000
+    Left = 368
+    Top = 488
+  end
+  object SpiralOutVisual1: TSpiralOutVisual
+    ColorFrequency = 15
+    Spacing = 2.000000000000000000
+    SpeedFactor = 0.010000000000000000
+    Thickness = 2.000000000000000000
+    Left = 488
+    Top = 488
+  end
+  object popFullScreen: TPopupMenu
+    Left = 792
+    Top = 8
+    object mFullCurrent: TMenuItem
+      Caption = 'Current Monitor'
+      Checked = True
+      Default = True
+      RadioItem = True
+      OnClick = mFullAllClick
+    end
+    object mFullMain: TMenuItem
+      Caption = 'Main Monitor'
+      RadioItem = True
+      OnClick = mFullAllClick
+    end
+    object mFullAll: TMenuItem
+      Caption = 'All Monitors'
+      RadioItem = True
+      OnClick = mFullAllClick
+    end
+  end
+  object RaindropVisual1: TRaindropVisual
+    Left = 584
+    Top = 488
   end
 end

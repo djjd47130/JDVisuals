@@ -17,7 +17,7 @@ type
 
   TJDVisualClass = class of TJDVisual;
 
-  TJDVisual = class(TObject)
+  TJDVisual = class(TComponent)
   private
     FThread: TJDVisualsThread;
     FControls: TJDVisualControls;
@@ -30,7 +30,7 @@ type
     procedure DoPaint; virtual; abstract;
     procedure CreateControls; virtual;
   public
-    constructor Create; virtual;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     property Thread: TJDVisualsThread read FThread write SetThread;
     property Controls: TJDVisualControls read FControls;
@@ -77,6 +77,7 @@ type
     property OnGetDimensions: TJDVOnGetDims read FOnGetDimensions write FOnGetDimensions;
   end;
 
+  {
   TJDVisualList = class(TObject)
   private
     FItems: TObjectList<TJDVisual>;
@@ -88,22 +89,25 @@ type
     procedure RegisterVisualClass(const AClass: TJDVisualClass);
     property Visuals[const Index: Integer]: TJDVisual read GetVisual; default;
   end;
+  }
 
   TJDVisualView = class(TCustomControl)
   private
     FThread: TJDVisualsThread;
     FTimer: TTimer;
-    FVisualIndex: Integer;
+    FVisual: TJDVisual;
+    //FVisualIndex: Integer;
     procedure TimerExec(Sender: TObject);
-    procedure SetVisualIndex(const Value: Integer);
+    //procedure SetVisualIndex(const Value: Integer);
     procedure ThreadGetDimensions(Sender: TJDVisualsThread; var Width, Height: Integer);
+    procedure SetVisual(const Value: TJDVisual);
   protected
     procedure Paint; override;
     procedure Resize; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function Visual: TJDVisual;
+    //function Visual: TJDVisual;
   published
     property Align;
     property AlignWithMargins;
@@ -117,7 +121,8 @@ type
     property ParentDoubleBuffered;
     property Touch;
     property UseDockManager;
-    property VisualIndex: Integer read FVisualIndex write SetVisualIndex;
+    //property VisualIndex: Integer read FVisualIndex write SetVisualIndex;
+    property Visual: TJDVisual read FVisual write SetVisual;
 
     property OnClick;
     property OnKeyDown;
@@ -137,10 +142,11 @@ type
     property OnUnDock;
   end;
 
-function Visuals: TJDVisualList;
+//function Visuals: TJDVisualList;
 
 implementation
 
+{
 var
   _Visuals: TJDVisualList;
 
@@ -150,25 +156,27 @@ begin
     _Visuals:= TJDVisualList.Create;
   Result:= _Visuals;
 end;
+}
 
 { TJDVisual }
 
-constructor TJDVisual.Create;
+constructor TJDVisual.Create(AOwner: TComponent);
 begin
+  inherited;
   FVisualName:= 'Unnamed Visual';
   FControls:= TJDVisualControls.Create;
   CreateControls;
-end;
-
-procedure TJDVisual.CreateControls;
-begin
-
 end;
 
 destructor TJDVisual.Destroy;
 begin
   FreeAndNil(FControls);
   inherited;
+end;
+
+procedure TJDVisual.CreateControls;
+begin
+
 end;
 
 function TJDVisual.GetCanvas: TCanvas;
@@ -336,6 +344,7 @@ end;
 
 { TJDVisualList }
 
+{
 constructor TJDVisualList.Create;
 begin
   FItems:= TObjectList<TJDVisual>.Create(True);
@@ -364,6 +373,7 @@ begin
   V:= AClass.Create;
   FItems.Add(V);
 end;
+}
 
 { TJDVisualView }
 
@@ -371,7 +381,8 @@ constructor TJDVisualView.Create(AOwner: TComponent);
 begin
   inherited;
   Color:= clBlack;
-  FVisualIndex:= -1;
+  //FVisualIndex:= -1;
+  FVisual:= nil;
 
   FTimer:= TTimer.Create(nil);
   FTimer.Interval:= 25;
@@ -403,6 +414,14 @@ begin
   FThread.Height:= ClientHeight;
 end;
 
+procedure TJDVisualView.SetVisual(const Value: TJDVisual);
+begin
+  FVisual := Value;
+  FThread.Visual:= Value;
+  Invalidate;
+end;
+
+{
 procedure TJDVisualView.SetVisualIndex(const Value: Integer);
 begin
   if Value < -1 then
@@ -415,6 +434,7 @@ begin
   else
     FThread.Visual:= Visuals[Value];
 end;
+}
 
 procedure TJDVisualView.ThreadGetDimensions(Sender: TJDVisualsThread; var Width,
   Height: Integer);
@@ -428,13 +448,18 @@ begin
   Invalidate;
 end;
 
+{
 function TJDVisualView.Visual: TJDVisual;
 begin
   Result:= FThread.Visual;
 end;
+}
 
+{
 initialization
   _Visuals:= nil;
 finalization
   FreeAndNil(_Visuals);
+}
+
 end.

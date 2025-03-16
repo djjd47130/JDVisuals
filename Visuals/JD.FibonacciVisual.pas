@@ -26,18 +26,31 @@ type
   TFibonacciVisual = class(TJDVisual)
   private
     FPen: TGPPen;
+    procedure SetThickness(const Value: Currency);
+    procedure SetZoom(const Value: Currency);
+    procedure SetCount(const Value: Integer);
+    procedure SetShowBoxes(const Value: Boolean);
+    procedure SetShowSpiral(const Value: Boolean);
   protected
     procedure DoStep; override;
     procedure DoPaint; override;
     procedure CreateControls; override;
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    function Thickness: Currency;
-    function Zoom: Currency;
-    function Count: Integer;
-    function ShowBoxes: Boolean;
-    function ShowSpiral: Boolean;
+
+    function GetThickness: Currency;
+    function GetZoom: Currency;
+    function GetCount: Integer;
+    function GetShowBoxes: Boolean;
+    function GetShowSpiral: Boolean;
+
+  published
+    property Thickness: Currency read GetThickness write SetThickness;
+    property Zoom: Currency read GetZoom write SetZoom;
+    property Count: Integer read GetCount write SetCount;
+    property ShowBoxes: Boolean read GetShowBoxes write SetShowBoxes;
+    property ShowSpiral: Boolean read GetShowSpiral write SetShowSpiral;
   end;
 
 implementation
@@ -89,7 +102,7 @@ end;
 
 { TFibonacciVisual }
 
-constructor TFibonacciVisual.Create;
+constructor TFibonacciVisual.Create(AOwner: TComponent);
 begin
   inherited;
   VisualName:= 'Fibonacci Spiral';
@@ -114,27 +127,52 @@ begin
   Controls.NewCheckControl('Show Spiral', True);
 end;
 
-function TFibonacciVisual.Thickness: Currency;
+function TFibonacciVisual.GetThickness: Currency;
 begin
   Result:= TJDVNumberControl(Controls['Thickness']).Value;
 end;
 
-function TFibonacciVisual.Zoom: Currency;
+function TFibonacciVisual.GetZoom: Currency;
 begin
   Result:= TJDVNumberControl(Controls['Zoom']).Value;
 end;
 
-function TFibonacciVisual.Count: Integer;
+procedure TFibonacciVisual.SetCount(const Value: Integer);
+begin
+  TJDVNumberControl(Controls['Count']).ValueInt:= Value;
+end;
+
+procedure TFibonacciVisual.SetShowBoxes(const Value: Boolean);
+begin
+  TJDVCheckControl(Controls['Show Boxes']).Checked:= Value;
+end;
+
+procedure TFibonacciVisual.SetShowSpiral(const Value: Boolean);
+begin
+  TJDVCheckControl(Controls['Show Spiral']).Checked:= Value;
+end;
+
+procedure TFibonacciVisual.SetThickness(const Value: Currency);
+begin
+  TJDVNumberControl(Controls['Thickness']).Value:= Value;
+end;
+
+procedure TFibonacciVisual.SetZoom(const Value: Currency);
+begin
+  TJDVNumberControl(Controls['Zoom']).Value:= Value;
+end;
+
+function TFibonacciVisual.GetCount: Integer;
 begin
   Result:= TJDVNumberControl(Controls['Count']).ValueInt;
 end;
 
-function TFibonacciVisual.ShowBoxes: Boolean;
+function TFibonacciVisual.GetShowBoxes: Boolean;
 begin
   Result:= TJDVCheckControl(Controls['Show Boxes']).Checked;
 end;
 
-function TFibonacciVisual.ShowSpiral: Boolean;
+function TFibonacciVisual.GetShowSpiral: Boolean;
 begin
   Result:= TJDVCheckControl(Controls['Show Spiral']).Checked;
 end;
@@ -158,14 +196,14 @@ var
     LR:= R; //Keep track of prior rectangle
     FPen.SetColor(MakeColor(clDkGray));
     FPen.SetWidth(1.0);
-    if ShowBoxes then
+    if GetShowBoxes then
       GPCanvas.DrawRectangle(FPen, R);
   end;
   procedure DoDrawCurve;
   begin
     CP:= Point(R.X + (R.Width / 2), R.Y + (R.Height / 2));
     FPen.SetColor(MakeColor(clSkyBlue));
-    FPen.SetWidth(Thickness);
+    FPen.SetWidth(GetThickness);
 
     //Here we need to assume that width/height of each box is doubled.
     //CR is used to define a virtual space for a circle, but then
@@ -203,8 +241,8 @@ var
   end;
 begin
   Dir:= fbRight;
-  Arr:= FibonacciNums(Count);
-  LR:= Rect(Thread.CenterPoint.X, Thread.CenterPoint.Y, Thread.CenterPoint.X+Zoom, Thread.CenterPoint.Y+Zoom);
+  Arr:= FibonacciNums(GetCount);
+  LR:= Rect(Thread.CenterPoint.X, Thread.CenterPoint.Y, Thread.CenterPoint.X+GetZoom, Thread.CenterPoint.Y+GetZoom);
 
   for X := 0 to Length(Arr)-1 do begin
     Num:= Arr[X];
@@ -213,18 +251,18 @@ begin
     //Here we set the box size based on current sequence number,
     //then decide how to position it relative to the prior one(s).
 
-    R.Width:= (Num*Zoom);
-    R.Height:= (Num*Zoom);
+    R.Width:= (Num*GetZoom);
+    R.Height:= (Num*GetZoom);
     case Dir of
       fbUp: begin
         //Next square on top - right to left
-        R.Y:= LR.Y - (Num*Zoom);
-        R.X:= (LR.X+LR.Height) - (Num*Zoom);
+        R.Y:= LR.Y - (Num*GetZoom);
+        R.X:= (LR.X+LR.Height) - (Num*GetZoom);
       end;
       fbLeft: begin
         //Next square on left - top to bottom
         R.Y:= LR.Y;
-        R.X:= LR.X - (Num*Zoom);
+        R.X:= LR.X - (Num*GetZoom);
       end;
       fbDown: begin
         //Next square on bottom - left to right
@@ -233,16 +271,16 @@ begin
       end;
       fbRight: begin
         //Next square on right - bottom to top
-        R.Y:= (LR.Y+LR.Height) - (Num*Zoom);
+        R.Y:= (LR.Y+LR.Height) - (Num*GetZoom);
         R.X:= LR.X + LR.Width;
       end;
     end;
     DoDrawRect;
-    if ShowSpiral then
+    if GetShowSpiral then
       DoDrawCurve;
   end;
 end;
 
 initialization
-  Visuals.RegisterVisualClass(TFibonacciVisual);
+  //Visuals.RegisterVisualClass(TFibonacciVisual);
 end.

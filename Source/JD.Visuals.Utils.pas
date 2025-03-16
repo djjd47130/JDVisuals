@@ -9,6 +9,9 @@ uses
   GDIPAPI, GDIPOBJ;
 
 type
+
+  //TODO: Integrate into JDLib - JD.Graphics and JD.Common...
+
   TColorArray = array of TColor;
 
   TColorRec = record

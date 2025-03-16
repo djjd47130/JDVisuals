@@ -40,7 +40,7 @@ type
     procedure DoPaint; override;
     procedure CreateControls; override;
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   end;
 
@@ -60,7 +60,7 @@ end;
 
 { TRaindropVisual }
 
-constructor TRaindropVisual.Create;
+constructor TRaindropVisual.Create(AOwner: TComponent);
 var
   X: Integer;
 begin
@@ -136,5 +136,5 @@ begin
 end;
 
 initialization
-  Visuals.RegisterVisualClass(TRaindropVisual);
+  //Visuals.RegisterVisualClass(TRaindropVisual);
 end.

@@ -38,7 +38,7 @@ type
     procedure DoPaint; override;
     procedure CreateControls; override;
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function ShowDots: Boolean;
     function ShowGrid: Boolean;
@@ -51,7 +51,7 @@ uses
 
 { TCircleTraceVisualVisual }
 
-constructor TCircleTraceVisualVisual.Create;
+constructor TCircleTraceVisualVisual.Create(AOwner: TComponent);
 var
   X: Integer;
 begin
@@ -256,5 +256,5 @@ begin
 end;
 
 initialization
-  Visuals.RegisterVisualClass(TCircleTraceVisualVisual);
+  //Visuals.RegisterVisualClass(TCircleTraceVisualVisual);
 end.

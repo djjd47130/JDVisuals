@@ -28,7 +28,7 @@ type
     procedure DoPaint; override;
     procedure CreateControls; override;
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function ColCount: Integer;
     function RowCount: Integer;
@@ -43,7 +43,7 @@ implementation
 
 { TChessboardVisual }
 
-constructor TChessboardVisual.Create;
+constructor TChessboardVisual.Create(AOwner: TComponent);
 begin
   inherited;
   VisualName:= 'Chessboard';
@@ -166,5 +166,5 @@ begin
 end;
 
 initialization
-  Visuals.RegisterVisualClass(TChessboardVisual);
+  //Visuals.RegisterVisualClass(TChessboardVisual);
 end.

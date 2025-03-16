@@ -95,7 +95,7 @@ type
     procedure CreateControls; override;
     procedure SetThread(const Value: TJDVisualsThread); override;
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
   public
     function StarCount: Integer;
@@ -103,7 +103,7 @@ type
     function TailLength: Currency;
     function RealStars: Boolean;
     function ShowStats: Boolean;
-
+  published
     property Speed: Single read FSpeed write SetSpeed;
     property MinSpeed: Single read FMinSpeed write SetMinSpeed;
     property MaxSpeed: Single read FMaxSpeed write SetMaxSpeed;
@@ -274,7 +274,7 @@ end;
 
 { TFinalFrontierVisual }
 
-constructor TFinalFrontierVisual.Create;
+constructor TFinalFrontierVisual.Create(AOwner: TComponent);
 begin
   inherited;
   Randomize;
@@ -522,5 +522,5 @@ begin
 end;
 
 initialization
-  Visuals.RegisterVisualClass(TFinalFrontierVisual);
+  //Visuals.RegisterVisualClass(TFinalFrontierVisual);
 end.

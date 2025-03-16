@@ -46,9 +46,11 @@ uses
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   JD.Visuals, JD.Visuals.Controls, JD.Visuals.Utils,
-  VisualControls;
-
+  VisualControls, System.Actions, Vcl.ActnList, JD.RaindropsVisual,
+  JD.FibonacciVisual, JD.FinalFrontierVisual, JD.SpiralOutVisual, RzButton,
+  Vcl.Menus, Vcl.Mask, RzEdit, RzCmboBx;
 type
+
   TfrmVisual = class(TForm)
     tmrMain: TTimer;
     pTop: TPanel;
@@ -56,7 +58,17 @@ type
     cboVisual: TComboBox;
     Label1: TLabel;
     btnFullScreen: TButton;
+    Acts: TActionList;
+    actFullScreen: TAction;
     View: TJDVisualView;
+    FibonacciVisual1: TFibonacciVisual;
+    FinalFrontierVisual1: TFinalFrontierVisual;
+    SpiralOutVisual1: TSpiralOutVisual;
+    popFullScreen: TPopupMenu;
+    mFullCurrent: TMenuItem;
+    mFullMain: TMenuItem;
+    mFullAll: TMenuItem;
+    RaindropVisual1: TRaindropVisual;
     procedure tmrMainTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ViewMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
@@ -64,9 +76,13 @@ type
     procedure cboVisualClick(Sender: TObject);
     procedure btnFullScreenClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
+    procedure mFullAllClick(Sender: TObject);
   private
     FControls: TVisualControlPanel;
     procedure PopulateVisualizations;
+    procedure QueryVisuals(AStrings: TStrings);
+    procedure SetFullScreen;
+    procedure LeaveFullScreen;
   public
     procedure ShowControls(const AShow: Boolean = True);
   end;
@@ -97,57 +113,95 @@ begin
   View.Align:= alClient;
 end;
 
-procedure TfrmVisual.btnFullScreenClick(Sender: TObject);
+procedure TfrmVisual.SetFullScreen;
 var
   M: TMonitor;
 begin
+  Self.BorderStyle:= bsNone;
+  Self.FormStyle:= TFormStyle.fsStayOnTop;
+  //Screen.Cursor:= crNone;
+
+  if mFullCurrent.Checked then begin
+    //Full screen to current monitor...
+    M:= Screen.MonitorFromWindow(Self.Handle, mdNearest);
+    Left:= M.Left;
+    Top:= M.Top;
+    Width:= M.Width;
+    Height:= M.Height;
+  end else
+  if mFullMain.Checked then begin
+    //Full screen to main monitor...
+    Self.Left:= 0;
+    Self.Width:= Screen.Width;
+    Self.Top:= 0;
+    Self.Height:= Screen.Height;
+  end else
+  if mFullAll.Checked then begin
+    //Full screen to all monitors...
+    Self.Left:= Screen.DesktopLeft;
+    Self.Top:= Screen.DesktopTop;
+    Self.Width:= Screen.DesktopWidth;
+    Self.Height:= Screen.DesktopHeight;
+  end;
+
+  actFullScreen.Caption:= 'Exit Full Screen';
+end;
+
+procedure TfrmVisual.LeaveFullScreen;
+begin
+  Self.BorderStyle:= bsSizeable;
+  Self.FormStyle:= TFormStyle.fsNormal;
+  Self.WindowState:= wsNormal;
+  Self.WindowState:= wsMaximized;
+  //Screen.Cursor:= crDefault;
+  actFullScreen.Caption:= 'Enter Full Screen';
+end;
+
+procedure TfrmVisual.btnFullScreenClick(Sender: TObject);
+begin
   case Self.BorderStyle of
     bsNone: begin
-      Self.BorderStyle:= bsSizeable;
-      Self.FormStyle:= TFormStyle.fsNormal;
-      Self.WindowState:= wsNormal;
-      Self.WindowState:= wsMaximized;
-      btnFullScreen.Caption:= 'Enter Full Screen';
+      LeaveFullScreen;
     end;
     bsSizeable: begin
-      Self.BorderStyle:= bsNone;
-      Self.FormStyle:= TFormStyle.fsStayOnTop;
-
-      {
-      Self.Left:= 0;
-      Self.Width:= Screen.Width;
-      Self.Top:= 0;
-      Self.Height:= Screen.Height;
-      }
-
-      //TODO: Current monitor...
-      M:= Screen.MonitorFromWindow(Self.Handle, mdNearest);
-      Left:= M.Left;
-      Top:= M.Top;
-      Width:= M.Width;
-      Height:= M.Height;
-
-      {
-      //TODO: All monitors....
-      Self.Left:= Screen.DesktopLeft;
-      Self.Top:= Screen.DesktopTop;
-      Self.Width:= Screen.DesktopWidth;
-      Self.Height:= Screen.DesktopHeight;
-      }
-
-      btnFullScreen.Caption:= 'Exit Full Screen';
+      SetFullScreen;
     end;
   end;
-  //TODO: Reset visual...
+  //TODO: Reset visual?
 
 end;
 
-procedure TfrmVisual.cboVisualClick(Sender: TObject);
+procedure TfrmVisual.QueryVisuals(AStrings: TStrings);
+var
+  I: Integer;
+  Component: TComponent;
 begin
+  AStrings.Clear;
+  if Assigned(AStrings) then begin
+    for I := 0 to Self.ComponentCount - 1 do begin
+      Component := Self.Components[I];
+      if Component.InheritsFrom(TJDVisual) then begin
+        var N: String:= TJDVisual(Component).VisualName;
+        AStrings.AddObject(N, Component);
+      end;
+    end;
+  end;
+end;
+
+procedure TfrmVisual.cboVisualClick(Sender: TObject);
+var
+  V: TJDVisual;
+begin
+  V:= nil;
   try
     if cboVisual.CanFocus then
       cboVisual.SetFocus;
-    View.VisualIndex:= cboVisual.ItemIndex;
+
+    //View.VisualIndex:= cboVisual.ItemIndex;
+
+    V:= TJDVisual(cboVisual.Items.Objects[cboVisual.ItemIndex]);
+    View.Visual:= V;
+
     FControls.CreateControls;
   except
     //Swallow exception - TODO
@@ -174,14 +228,17 @@ begin
   pTop.Width:= ClientWidth;
 end;
 
+procedure TfrmVisual.mFullAllClick(Sender: TObject);
+begin
+  TMenuItem(Sender).Checked:= True;
+  SetFullScreen;
+end;
+
 procedure TfrmVisual.PopulateVisualizations;
 var
   X: Integer;
 begin
-  cboVisual.Items.Clear;
-  for X := 0 to Visuals.Count-1 do begin
-    cboVisual.Items.Add(Visuals[X].VisualName);
-  end;
+  QueryVisuals(cboVisual.Items);
   if cboVisual.Items.Count > 0 then begin
     cboVisual.ItemIndex:= 0;
     cboVisualClick(nil);

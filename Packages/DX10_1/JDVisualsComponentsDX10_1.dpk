@@ -30,7 +30,8 @@ package JDVisualsComponentsDX10_1;
 
 requires
   rtl,
-  vcl;
+  vcl,
+  dwsLibRuntime;
 
 contains
   JD.Visuals.Controls in '..\..\Source\JD.Visuals.Controls.pas',

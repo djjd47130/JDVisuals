@@ -36,22 +36,31 @@ type
     FCurPoint: TGPPointF;
     FLast: TGPPointF;
     FCols: TColorArray;
-    FColorFrequency: Integer;
     FColorTrack: Integer;
     procedure ShiftColors;
     procedure SetColorFrequency(const Value: Integer);
     procedure ResetButtonClick(Sender: TObject);
+    procedure SetSpacing(const Value: Currency);
+    procedure SetSpeedFactor(const Value: Currency);
+    procedure SetThickness(const Value: Currency);
   protected
     procedure DoStep; override;
     procedure DoPaint; override;
     procedure CreateControls; override;
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    property ColorFrequency: Integer read FColorFrequency write SetColorFrequency;
-    function Spacing: Currency;
-    function SpeedFactor: Currency;
-    function Thickness: Currency;
+
+    function GetColorFrequency: Integer;
+    function GetSpacing: Currency;
+    function GetSpeedFactor: Currency;
+    function GetThickness: Currency;
+
+  published
+    property ColorFrequency: Integer read GetColorFrequency write SetColorFrequency;
+    property Spacing: Currency read GetSpacing write SetSpacing;
+    property SpeedFactor: Currency read GetSpeedFactor write SetSpeedFactor;
+    property Thickness: Currency read GetThickness write SetThickness;
   end;
 
 implementation
@@ -61,13 +70,13 @@ uses
 
 { TSpiralOutVisual }
 
-constructor TSpiralOutVisual.Create;
+constructor TSpiralOutVisual.Create(AOwner: TComponent);
 var
   X: Integer;
 begin
   inherited;
   VisualName:= 'Spiral Out';
-  FColorFrequency:= 15;
+  //ColorFrequency:= 15;
   FBaseColor.R:= RandomRange(COLOR_MIN, COLOR_MAX);
   FBaseColor.G:= RandomRange(COLOR_MIN, COLOR_MAX);
   FBaseColor.B:= RandomRange(COLOR_MIN, COLOR_MAX);
@@ -75,14 +84,14 @@ begin
   FDirG:= 3;
   FDirB:= 1;
   FPen:= TGPPen.Create(MakeColor(FBaseColor.R, FBaseColor.G, FBaseColor.B));
-  FPen.SetWidth(Thickness);
+  FPen.SetWidth(GetThickness);
   FPen.SetStartCap(LineCap.LineCapRound);
   FPen.SetEndCap(LineCap.LineCapRound);
   SetLength(FPoints, POINT_COUNT);
   for X := 0 to Length(FPoints)-1 do begin
     FPoints[X].Degrees:= 0;
-    FPoints[X].Distance:= (X+1) * Spacing;
-    FPoints[X].Speed:= (X+1) * SpeedFactor;
+    FPoints[X].Distance:= (X+1) * GetSpacing;
+    FPoints[X].Speed:= (X+1) * GetSpeedFactor;
   end;
 end;
 
@@ -95,10 +104,11 @@ end;
 
 procedure TSpiralOutVisual.CreateControls;
 begin
-  Controls.NewButtonControl('Reset', ResetButtonClick);
-  Controls.NewNumberControl('Thickness', ntFloat, 17.0, 0.1, 1000.0, 2, 0.1);
-  Controls.NewNumberControl('Spacing', ntFloat, 2.7, 0.001, 1000.0, 3, 0.1);
-  Controls.NewNumberControl('Speed', ntFloat, 0.05, 0.025, 5.0, 3, 0.025);
+  Controls.NewButtonControl('Reset',            ResetButtonClick);
+  Controls.NewNumberControl('Color Frequency',  ntInteger,  15,   1,      100,    0,  1);
+  Controls.NewNumberControl('Thickness',        ntFloat,    17.0, 0.1,    1000.0, 2,  0.1);
+  Controls.NewNumberControl('Spacing',          ntFloat,    2.7,  0.001,  1000.0, 3,  0.1);
+  Controls.NewNumberControl('Speed',            ntFloat,    0.05, 0.005,  5.0,    3,  0.01);
 end;
 
 procedure TSpiralOutVisual.ResetButtonClick(Sender: TObject);
@@ -110,24 +120,44 @@ begin
   end;
 end;
 
-function TSpiralOutVisual.Spacing: Currency;
+function TSpiralOutVisual.GetColorFrequency: Integer;
+begin
+  Result:= TJDVNumberControl(Controls['Color Frequency']).ValueInt;
+end;
+
+function TSpiralOutVisual.GetSpacing: Currency;
 begin
   Result:= TJDVNumberControl(Controls['Spacing']).Value;
 end;
 
-function TSpiralOutVisual.SpeedFactor: Currency;
+function TSpiralOutVisual.GetSpeedFactor: Currency;
 begin
   Result:= TJDVNumberControl(Controls['Speed']).Value;
 end;
 
-function TSpiralOutVisual.Thickness: Currency;
+function TSpiralOutVisual.GetThickness: Currency;
 begin
   Result:= TJDVNumberControl(Controls['Thickness']).Value;
 end;
 
 procedure TSpiralOutVisual.SetColorFrequency(const Value: Integer);
 begin
-  FColorFrequency := Value;
+  TJDVNumberControl(Controls['Color Frequency']).ValueInt:= Value;
+end;
+
+procedure TSpiralOutVisual.SetSpacing(const Value: Currency);
+begin
+  TJDVNumberControl(Controls['Spacing']).Value:= Value;
+end;
+
+procedure TSpiralOutVisual.SetSpeedFactor(const Value: Currency);
+begin
+  TJDVNumberControl(Controls['Speed']).Value:= Value;
+end;
+
+procedure TSpiralOutVisual.SetThickness(const Value: Currency);
+begin
+  TJDVNumberControl(Controls['Thickness']).Value:= Value;
 end;
 
 procedure TSpiralOutVisual.DoStep;
@@ -135,12 +165,12 @@ var
   X: Integer;
 begin
   for X := 0 to Length(FPoints)-1 do begin
-    FPoints[X].Distance:= (X+1) * Spacing;
-    FPoints[X].Speed:= (X+1) * SpeedFactor;
+    FPoints[X].Distance:= (X+1) * GetSpacing;
+    FPoints[X].Speed:= (X+1) * GetSpeedFactor;
     FPoints[X].Degrees:= FPoints[X].Degrees + FPoints[X].Speed;
   end;
   Inc(FColorTrack);
-  if FColorTrack >= FColorFrequency then begin
+  if FColorTrack >= ColorFrequency then begin
     FColorTrack:= 0;
     ShiftColors;
   end;
@@ -164,7 +194,7 @@ var
   X: Integer;
 begin
   FCols:= ColorFade(FBaseColor.Value, Length(FPoints), COLOR_FADE);
-  FPen.SetWidth(Thickness);
+  FPen.SetWidth(GetThickness);
   for X := 0 to Length(FPoints)-1 do begin
     FCurPoint:= PointAroundCircle(Thread.CenterPoint, FPoints[X].Distance, FPoints[X].Degrees);
     if X > 0 then begin
@@ -176,5 +206,5 @@ begin
 end;
 
 initialization
-  Visuals.RegisterVisualClass(TSpiralOutVisual);
+  //Visuals.RegisterVisualClass(TSpiralOutVisual);
 end.

@@ -53,7 +53,7 @@ type
     procedure CreateControls; override;
     procedure SetThread(const Value: TJDVisualsThread); override;
   public
-    constructor Create; override;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     function CharCount: Integer;
     function TrailSize: Integer;
@@ -67,7 +67,7 @@ uses
 
 { TMatrixVisual }
 
-constructor TMatrixVisual.Create;
+constructor TMatrixVisual.Create(AOwner: TComponent);
 var
   X: Integer;
 begin
@@ -275,5 +275,5 @@ begin
 end;
 
 initialization
-  Visuals.RegisterVisualClass(TMatrixVisual);
+  //Visuals.RegisterVisualClass(TMatrixVisual);
 end.
