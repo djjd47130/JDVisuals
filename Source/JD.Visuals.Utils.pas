@@ -12,27 +12,29 @@ type
 
   //TODO: Integrate into JDLib - JD.Graphics and JD.Common...
 
+  //--> TJDColorArray
   TColorArray = array of TColor;
 
+  //--> TJDColorRec
   TColorRec = record
     R, G, B: Integer;
     function Value: TColor;
   end;
 
-function CreateGPCanvas(const DC: HDC): TGPGraphics;
+function CreateGPCanvas(const DC: HDC): TGPGraphics; //--> JD.Graphics
 
-function PointAroundCircle(Center: TGPPointF; Distance: Currency; Degrees: Currency): TGPPointF;
-function IntRange(const Value, Min, Max: Integer): Integer;
-function ColorFade(const ASource: TColor; const ACount: Integer; const Shift: Integer): TColorArray; overload;
-function ColorFade(const ASource: TColor; const Shift: Integer): TColor; overload;
-function MakeColor(const AColor: TColor): Cardinal; overload;
-function PosOf(const AValue: Integer): Integer; overload;
-function NegOf(const AValue: Integer): Integer; overload;
-function PosOf(const AValue: Currency): Currency; overload;
-function NegOf(const AValue: Currency): Currency; overload;
+function PointAroundCircle(Center: TGPPointF; Distance: Currency; Degrees: Currency): TGPPointF; //--> JD.Common
+function IntRange(const Value, Min, Max: Integer): Integer; //--> JD.Common
+function ColorFade(const ASource: TColor; const ACount: Integer; const Shift: Integer): TColorArray; overload; //--> JD.Graphics
+function ColorFade(const ASource: TColor; const Shift: Integer): TColor; overload; //--> JD.Graphics
+function MakeColor(const AColor: TColor): Cardinal; overload; //--> TJDColorRec.GDIPColor
+function PosOf(const AValue: Integer): Integer; overload; //--> JD.Common
+function NegOf(const AValue: Integer): Integer; overload; //--> JD.Common
+function PosOf(const AValue: Currency): Currency; overload; //--> JD.Common
+function NegOf(const AValue: Currency): Currency; overload; //--> JD.Common
 
 function SetThreadDescription(hThread: THandle; lpThreadDescription: WideString): HRESULT; stdcall;
-  external kernel32 name 'SetThreadDescription';
+  external kernel32 name 'SetThreadDescription'; //--> JD.Common
 
 
 implementation

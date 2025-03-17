@@ -9,6 +9,9 @@
         <Projects Include="JDVisuals\JDVisuals.dproj">
             <Dependencies/>
         </Projects>
+        <Projects Include="..\..\JD\Delphi\JDMesh\JDMesh.dproj">
+            <Dependencies/>
+        </Projects>
     </ItemGroup>
     <ProjectExtensions>
         <Borland.Personality>Default.Personality.12</Borland.Personality>
@@ -35,14 +38,23 @@
     <Target Name="JDVisuals:Make">
         <MSBuild Projects="JDVisuals\JDVisuals.dproj" Targets="Make"/>
     </Target>
+    <Target Name="JDMesh">
+        <MSBuild Projects="..\..\JD\Delphi\JDMesh\JDMesh.dproj"/>
+    </Target>
+    <Target Name="JDMesh:Clean">
+        <MSBuild Projects="..\..\JD\Delphi\JDMesh\JDMesh.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JDMesh:Make">
+        <MSBuild Projects="..\..\JD\Delphi\JDMesh\JDMesh.dproj" Targets="Make"/>
+    </Target>
     <Target Name="Build">
-        <CallTarget Targets="JDVisualsComponentsDX10_1;JDVisuals"/>
+        <CallTarget Targets="JDVisualsComponentsDX10_1;JDVisuals;JDMesh"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="JDVisualsComponentsDX10_1:Clean;JDVisuals:Clean"/>
+        <CallTarget Targets="JDVisualsComponentsDX10_1:Clean;JDVisuals:Clean;JDMesh:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="JDVisualsComponentsDX10_1:Make;JDVisuals:Make"/>
+        <CallTarget Targets="JDVisualsComponentsDX10_1:Make;JDVisuals:Make;JDMesh:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

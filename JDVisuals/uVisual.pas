@@ -46,9 +46,13 @@ uses
   System.SysUtils, System.Variants, System.Classes,
   Vcl.Graphics, Vcl.Controls, Vcl.Forms, Vcl.Dialogs, Vcl.ExtCtrls, Vcl.StdCtrls,
   JD.Visuals, JD.Visuals.Controls, JD.Visuals.Utils,
-  VisualControls, System.Actions, Vcl.ActnList, JD.RaindropsVisual,
-  JD.FibonacciVisual, JD.FinalFrontierVisual, JD.SpiralOutVisual, RzButton,
-  Vcl.Menus, Vcl.Mask, RzEdit, RzCmboBx;
+  VisualControls, System.Actions, Vcl.ActnList,
+  JD.RaindropsVisual,
+  JD.FibonacciVisual,
+  JD.FinalFrontierVisual,
+  JD.SpiralOutVisual,
+  RzButton,
+  Vcl.Menus, Vcl.Mask, RzEdit, RzCmboBx, JD.TessellationVisual;
 type
 
   TfrmVisual = class(TForm)
@@ -69,6 +73,7 @@ type
     mFullMain: TMenuItem;
     mFullAll: TMenuItem;
     RaindropVisual1: TRaindropVisual;
+    TessellationVisual1: TTessellationVisual;
     procedure tmrMainTimer(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure ViewMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);

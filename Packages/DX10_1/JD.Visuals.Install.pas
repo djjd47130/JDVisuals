@@ -9,7 +9,8 @@ uses
   JD.FinalFrontierVisual,
   JD.MatrixVisual,
   JD.RaindropsVisual,
-  JD.SpiralOutVisual;
+  JD.SpiralOutVisual,
+  JD.TessellationVisual;
 
 procedure Register;
 
@@ -23,7 +24,8 @@ begin
     TMatrixVisual,
     TFinalFrontierVisual,
     TFibonacciVisual,
-    TSpiralOutVisual
+    TSpiralOutVisual,
+    TTessellationVisual
     ]);
 end;
 

@@ -37,12 +37,14 @@ type
     FLast: TGPPointF;
     FCols: TColorArray;
     FColorTrack: Integer;
+    FReset: Boolean;
     procedure ShiftColors;
     procedure SetColorFrequency(const Value: Integer);
     procedure ResetButtonClick(Sender: TObject);
     procedure SetSpacing(const Value: Currency);
     procedure SetSpeedFactor(const Value: Currency);
     procedure SetThickness(const Value: Currency);
+    procedure SetReset(const Value: Boolean);
   protected
     procedure DoStep; override;
     procedure DoPaint; override;
@@ -57,6 +59,7 @@ type
     function GetThickness: Currency;
 
   published
+    property Reset: Boolean read FReset write SetReset;
     property ColorFrequency: Integer read GetColorFrequency write SetColorFrequency;
     property Spacing: Currency read GetSpacing write SetSpacing;
     property SpeedFactor: Currency read GetSpeedFactor write SetSpeedFactor;
@@ -76,7 +79,6 @@ var
 begin
   inherited;
   VisualName:= 'Spiral Out';
-  //ColorFrequency:= 15;
   FBaseColor.R:= RandomRange(COLOR_MIN, COLOR_MAX);
   FBaseColor.G:= RandomRange(COLOR_MIN, COLOR_MAX);
   FBaseColor.B:= RandomRange(COLOR_MIN, COLOR_MAX);
@@ -143,6 +145,14 @@ end;
 procedure TSpiralOutVisual.SetColorFrequency(const Value: Integer);
 begin
   TJDVNumberControl(Controls['Color Frequency']).ValueInt:= Value;
+end;
+
+procedure TSpiralOutVisual.SetReset(const Value: Boolean);
+begin
+  if Value then begin
+    FReset:= False;
+    Self.ResetButtonClick(nil);
+  end;
 end;
 
 procedure TSpiralOutVisual.SetSpacing(const Value: Currency);

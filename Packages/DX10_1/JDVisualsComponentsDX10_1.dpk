@@ -9,21 +9,21 @@ package JDVisualsComponentsDX10_1;
 {$EXTENDEDSYNTAX ON}
 {$IMPORTEDDATA ON}
 {$IOCHECKS ON}
-{$LOCALSYMBOLS OFF}
+{$LOCALSYMBOLS ON}
 {$LONGSTRINGS ON}
 {$OPENSTRINGS ON}
-{$OPTIMIZATION ON}
+{$OPTIMIZATION OFF}
 {$OVERFLOWCHECKS OFF}
 {$RANGECHECKS OFF}
-{$REFERENCEINFO OFF}
+{$REFERENCEINFO ON}
 {$SAFEDIVIDE OFF}
-{$STACKFRAMES OFF}
+{$STACKFRAMES ON}
 {$TYPEDADDRESS OFF}
 {$VARSTRINGCHECKS ON}
 {$WRITEABLECONST OFF}
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
-{$DEFINE RELEASE}
+{$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'JD Visual Components DX10.1 Berlin'}
 {$IMPLICITBUILD ON}
@@ -31,7 +31,8 @@ package JDVisualsComponentsDX10_1;
 requires
   rtl,
   vcl,
-  dwsLibRuntime;
+  dwsLibRuntime,
+  JDLibComponents;
 
 contains
   JD.Visuals.Controls in '..\..\Source\JD.Visuals.Controls.pas',
@@ -45,7 +46,8 @@ contains
   JD.FinalFrontierVisual in '..\..\Visuals\JD.FinalFrontierVisual.pas',
   JD.MatrixVisual in '..\..\Visuals\JD.MatrixVisual.pas',
   JD.RaindropsVisual in '..\..\Visuals\JD.RaindropsVisual.pas',
-  JD.Visuals.DM in '..\..\Source\JD.Visuals.DM.pas' {dmJDVisualsScript: TDataModule};
+  JD.Visuals.DM in '..\..\Source\JD.Visuals.DM.pas' {dmJDVisualsScript: TDataModule},
+  JD.TessellationVisual in '..\..\Visuals\JD.TessellationVisual.pas';
 
 end.
 

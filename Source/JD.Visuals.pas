@@ -77,37 +77,22 @@ type
     property OnGetDimensions: TJDVOnGetDims read FOnGetDimensions write FOnGetDimensions;
   end;
 
-  {
-  TJDVisualList = class(TObject)
-  private
-    FItems: TObjectList<TJDVisual>;
-    function GetVisual(const Index: Integer): TJDVisual;
-  public
-    constructor Create;
-    destructor Destroy; override;
-    function Count: Integer;
-    procedure RegisterVisualClass(const AClass: TJDVisualClass);
-    property Visuals[const Index: Integer]: TJDVisual read GetVisual; default;
-  end;
-  }
-
   TJDVisualView = class(TCustomControl)
   private
     FThread: TJDVisualsThread;
     FTimer: TTimer;
     FVisual: TJDVisual;
-    //FVisualIndex: Integer;
     procedure TimerExec(Sender: TObject);
-    //procedure SetVisualIndex(const Value: Integer);
     procedure ThreadGetDimensions(Sender: TJDVisualsThread; var Width, Height: Integer);
     procedure SetVisual(const Value: TJDVisual);
+    function GetInterval: Integer;
+    procedure SetInterval(const Value: Integer);
   protected
     procedure Paint; override;
     procedure Resize; override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
-    //function Visual: TJDVisual;
   published
     property Align;
     property AlignWithMargins;
@@ -117,11 +102,11 @@ type
     property DragCursor;
     property DragKind;
     property DragMode;
+    property Interval: Integer read GetInterval write SetInterval;
     property ParentColor;
     property ParentDoubleBuffered;
     property Touch;
     property UseDockManager;
-    //property VisualIndex: Integer read FVisualIndex write SetVisualIndex;
     property Visual: TJDVisual read FVisual write SetVisual;
 
     property OnClick;
@@ -142,21 +127,7 @@ type
     property OnUnDock;
   end;
 
-//function Visuals: TJDVisualList;
-
 implementation
-
-{
-var
-  _Visuals: TJDVisualList;
-
-function Visuals: TJDVisualList;
-begin
-  if _Visuals = nil then
-    _Visuals:= TJDVisualList.Create;
-  Result:= _Visuals;
-end;
-}
 
 { TJDVisual }
 
@@ -342,51 +313,18 @@ begin
   end;
 end;
 
-{ TJDVisualList }
-
-{
-constructor TJDVisualList.Create;
-begin
-  FItems:= TObjectList<TJDVisual>.Create(True);
-end;
-
-destructor TJDVisualList.Destroy;
-begin
-  FreeAndNil(FItems);
-  inherited;
-end;
-
-function TJDVisualList.GetVisual(const Index: Integer): TJDVisual;
-begin
-  Result:= FItems[Index];
-end;
-
-function TJDVisualList.Count: Integer;
-begin
-  Result:= FItems.Count;
-end;
-
-procedure TJDVisualList.RegisterVisualClass(const AClass: TJDVisualClass);
-var
-  V: TJDVisual;
-begin
-  V:= AClass.Create;
-  FItems.Add(V);
-end;
-}
-
 { TJDVisualView }
 
 constructor TJDVisualView.Create(AOwner: TComponent);
 begin
   inherited;
   Color:= clBlack;
-  //FVisualIndex:= -1;
   FVisual:= nil;
 
   FTimer:= TTimer.Create(nil);
   FTimer.Interval:= 25;
   FTimer.OnTimer:= TimerExec;
+
   FThread:= TJDVisualsThread.Create(Canvas);
   FThread.OnGetDimensions:= ThreadGetDimensions;
   FThread.Start;
@@ -399,6 +337,11 @@ begin
   FreeAndNil(FThread);
   FreeAndNil(FTimer);
   inherited;
+end;
+
+function TJDVisualView.GetInterval: Integer;
+begin
+  Result:= FTimer.Interval;
 end;
 
 procedure TJDVisualView.Paint;
@@ -414,27 +357,17 @@ begin
   FThread.Height:= ClientHeight;
 end;
 
+procedure TJDVisualView.SetInterval(const Value: Integer);
+begin
+  FTimer.Interval:= Value;
+end;
+
 procedure TJDVisualView.SetVisual(const Value: TJDVisual);
 begin
   FVisual := Value;
   FThread.Visual:= Value;
   Invalidate;
 end;
-
-{
-procedure TJDVisualView.SetVisualIndex(const Value: Integer);
-begin
-  if Value < -1 then
-    raise Exception.Create('Index out of range');
-  if Value > Visuals.Count-1 then
-    raise Exception.Create('Index out of range');
-  FVisualIndex:= Value;
-  if Value = -1 then
-    FThread.Visual:= nil
-  else
-    FThread.Visual:= Visuals[Value];
-end;
-}
 
 procedure TJDVisualView.ThreadGetDimensions(Sender: TJDVisualsThread; var Width,
   Height: Integer);
@@ -447,19 +380,5 @@ procedure TJDVisualView.TimerExec(Sender: TObject);
 begin
   Invalidate;
 end;
-
-{
-function TJDVisualView.Visual: TJDVisual;
-begin
-  Result:= FThread.Visual;
-end;
-}
-
-{
-initialization
-  _Visuals:= nil;
-finalization
-  FreeAndNil(_Visuals);
-}
 
 end.

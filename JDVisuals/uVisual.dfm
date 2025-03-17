@@ -2,8 +2,8 @@ object frmVisual: TfrmVisual
   Left = 0
   Top = 0
   Caption = 'JD Visuals'
-  ClientHeight = 540
-  ClientWidth = 969
+  ClientHeight = 570
+  ClientWidth = 1025
   Color = clBlack
   DoubleBuffered = True
   Font.Charset = DEFAULT_CHARSET
@@ -17,25 +17,27 @@ object frmVisual: TfrmVisual
   OnMouseMove = ViewMouseMove
   OnResize = FormResize
   DesignSize = (
-    969
-    540)
+    1025
+    570)
   PixelsPerInch = 96
   TextHeight = 13
   object View: TJDVisualView
     Left = 0
     Top = 0
-    Width = 969
-    Height = 465
+    Width = 1025
+    Height = 425
     Align = alTop
     Anchors = [akLeft, akTop, akRight, akBottom]
-    Visual = RaindropVisual1
+    Color = clBlack
+    Interval = 15
+    ParentColor = False
+    Visual = SpiralOutVisual1
     OnMouseMove = ViewMouseMove
-    ExplicitTop = 1
   end
   object pTop: TPanel
     Left = 0
     Top = 0
-    Width = 969
+    Width = 1025
     Height = 46
     Anchors = [akLeft, akTop, akRight]
     BevelOuter = bvNone
@@ -92,7 +94,7 @@ object frmVisual: TfrmVisual
     end
     object btnFullScreen: TButton
       Tag = -2
-      Left = 840
+      Left = 896
       Top = 0
       Width = 129
       Height = 46
@@ -107,12 +109,12 @@ object frmVisual: TfrmVisual
     Enabled = False
     Interval = 25
     OnTimer = tmrMainTimer
-    Left = 32
-    Top = 488
+    Left = 24
+    Top = 440
   end
   object Acts: TActionList
-    Left = 88
-    Top = 488
+    Left = 80
+    Top = 440
     object actFullScreen: TAction
       Category = 'View'
       Caption = 'Enter Full Screen'
@@ -126,23 +128,24 @@ object frmVisual: TfrmVisual
     Count = 30
     ShowBoxes = True
     ShowSpiral = True
-    Left = 248
-    Top = 488
+    Left = 240
+    Top = 440
   end
   object FinalFrontierVisual1: TFinalFrontierVisual
-    Speed = 0.473437219858169500
+    Speed = 0.888469696044921900
     MinSpeed = 0.000199999994947575
     MaxSpeed = 1.000000000000000000
-    Left = 368
-    Top = 488
+    Left = 360
+    Top = 440
   end
   object SpiralOutVisual1: TSpiralOutVisual
+    Reset = False
     ColorFrequency = 15
-    Spacing = 2.000000000000000000
-    SpeedFactor = 0.010000000000000000
-    Thickness = 2.000000000000000000
-    Left = 488
-    Top = 488
+    Spacing = 4.200000000000000000
+    SpeedFactor = 0.030000000000000000
+    Thickness = 69.000000000000000000
+    Left = 480
+    Top = 440
   end
   object popFullScreen: TPopupMenu
     Left = 792
@@ -166,7 +169,27 @@ object frmVisual: TfrmVisual
     end
   end
   object RaindropVisual1: TRaindropVisual
-    Left = 584
-    Top = 488
+    Left = 576
+    Top = 440
+  end
+  object TessellationVisual1: TTessellationVisual
+    PatternType = ptHexagons
+    ShapeSize = 64.000000000000000000
+    LineWidth = 0.500000000000000000
+    BackGradStart.Color = -4042376
+    BackGradStart.UseStandardColor = False
+    BackGradStart.Alpha = 255
+    BackGradEnd.Color = -1262333576
+    BackGradEnd.UseStandardColor = False
+    BackGradEnd.Alpha = 180
+    LineGradStart.Color = -1765650056
+    LineGradStart.UseStandardColor = False
+    LineGradStart.Alpha = 150
+    LineGradEnd.Color = 12734840
+    LineGradEnd.UseStandardColor = False
+    LineGradEnd.Alpha = 0
+    GradRange = 200
+    Left = 672
+    Top = 440
   end
 end
