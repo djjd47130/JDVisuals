@@ -6,7 +6,7 @@ unit uVisual;
 
   OpenSource on GitHub: https://github.com/djjd47130/JDVisuals
 
-  NOTE: This project makes use of the JEDI Code Library for Delphi.
+  NOTE: This project makes use of JEDI and/or Raize (Konopka) controls.
 
   This application displays various different visuals based on customized
   visual code. There's a primary component using a thread which is used to
@@ -172,8 +172,6 @@ begin
       SetFullScreen;
     end;
   end;
-  //TODO: Reset visual?
-
 end;
 
 procedure TfrmVisual.QueryVisuals(AStrings: TStrings);
@@ -201,8 +199,6 @@ begin
   try
     if cboVisual.CanFocus then
       cboVisual.SetFocus;
-
-    //View.VisualIndex:= cboVisual.ItemIndex;
 
     V:= TJDVisual(cboVisual.Items.Objects[cboVisual.ItemIndex]);
     View.Visual:= V;

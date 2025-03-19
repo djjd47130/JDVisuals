@@ -105,8 +105,8 @@ end;
 constructor TFibonacciVisual.Create(AOwner: TComponent);
 begin
   inherited;
-  VisualName:= 'Fibonacci Spiral';
-  FPen:= TGPPen.Create(MakeColor(clSkyBlue));
+  VisualName := 'Fibonacci Spiral';
+  FPen := TGPPen.Create(MakeColor(clSkyBlue));
   FPen.SetWidth(2.0);
   FPen.SetStartCap(LineCap.LineCapRound);
   FPen.SetEndCap(LineCap.LineCapRound);
@@ -178,9 +178,19 @@ begin
 end;
 
 procedure TFibonacciVisual.DoStep;
+const
+  ZoomMin = 0.1;  // Minimum zoom level
+  ZoomMax = 4.62; // Maximum zoom level before resetting
+  ZoomSpeed = 1.005; // Multiplier for incremental zoom
 begin
-  //TODO: An actual animation of some kind...
+  // Incrementally adjust the zoom factor for smooth animation
+  Zoom := Zoom * ZoomSpeed;
 
+  // Reset zoom once it exceeds the threshold
+  if Zoom >= ZoomMax then begin
+    // Seamless reset: Ensure alignment by looping back proportionally
+    Zoom := ZoomMin;
+  end;
 end;
 
 procedure TFibonacciVisual.DoPaint;
@@ -280,6 +290,117 @@ begin
       DoDrawCurve;
   end;
 end;
+
+
+{
+
+procedure TFibonacciVisual.DoPaint;
+var
+  Arr: TIntArray;
+  Num: Integer;
+  X: Integer;
+  R, LR, CR: TGPRectF;
+  Dir: TFibDir;
+  Zoom: Currency;
+
+  // Nested procedure to draw the curve (spiral arc)
+  procedure DoDrawCurve;
+  var
+    CP: TGPPointF;
+  begin
+    CP := Point(R.X + (R.Width / 2), R.Y + (R.Height / 2));
+    FPen.SetColor(MakeColor(clSkyBlue));
+    FPen.SetWidth(GetThickness); // Restored original pen thickness
+
+    CR.Width := (R.Width * 2);
+    CR.Height := (R.Height * 2);
+
+    case Dir of
+      fbUp:
+      begin
+        CR.X := R.X - R.Width;
+        CR.Y := R.Y;
+        GPCanvas.DrawArc(FPen, CR.X, CR.Y, CR.Width, CR.Height, (90 * 3), (90));
+      end;
+      fbLeft:
+      begin
+        CR.X := R.X;
+        CR.Y := R.Y;
+        GPCanvas.DrawArc(FPen, CR.X, CR.Y, CR.Width, CR.Height, (90 * 2), (90));
+      end;
+      fbDown:
+      begin
+        CR.X := R.X;
+        CR.Y := (R.Y - R.Height);
+        GPCanvas.DrawArc(FPen, CR.X, CR.Y, CR.Width, CR.Height, (90), (90));
+      end;
+      fbRight:
+      begin
+        CR.X := (R.X - R.Width);
+        CR.Y := (R.Y - R.Height);
+        GPCanvas.DrawArc(FPen, CR.X, CR.Y, CR.Width, CR.Height, (0), (90));
+      end;
+    end;
+  end;
+
+begin
+  Dir := fbRight;
+  Arr := FibonacciNums(GetCount);
+  Zoom := GetZoom * FZoomFactor;
+
+  // Start the first rectangle at the center, scaled by zoom
+  LR := Rect(
+    Thread.CenterPoint.X - (Zoom / 2),
+    Thread.CenterPoint.Y - (Zoom / 2),
+    Thread.CenterPoint.X + (Zoom / 2),
+    Thread.CenterPoint.Y + (Zoom / 2)
+  );
+
+  for X := 0 to Length(Arr) - 1 do
+  begin
+    Num := Arr[X];
+    Dir := NextDir(Dir);
+
+    // Calculate the next rectangle size and position based on direction
+    R.Width := (Num * Zoom);
+    R.Height := (Num * Zoom);
+
+    case Dir of
+      fbUp:
+      begin
+        R.Y := LR.Y - R.Height;
+        R.X := LR.X;
+      end;
+      fbLeft:
+      begin
+        R.Y := LR.Y;
+        R.X := LR.X - R.Width;
+      end;
+      fbDown:
+      begin
+        R.Y := LR.Y + LR.Height;
+        R.X := LR.X;
+      end;
+      fbRight:
+      begin
+        R.Y := LR.Y;
+        R.X := LR.X + LR.Width;
+      end;
+    end;
+
+    // Update the last rectangle
+    LR := R;
+
+    // Draw the rectangle and spiral
+    if GetShowBoxes then
+      GPCanvas.DrawRectangle(FPen, R);
+    if GetShowSpiral then
+      DoDrawCurve; // Call the nested curve drawing procedure
+  end;
+end;
+}
+
+
 
 initialization
   //Visuals.RegisterVisualClass(TFibonacciVisual);

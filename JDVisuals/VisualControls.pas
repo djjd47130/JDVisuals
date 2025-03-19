@@ -40,10 +40,32 @@ type
     property Visuals: TJDVisualView read FVisuals write SetVisuals;
   end;
 
+/// <summary>
+/// Creates base panel for a single control container.
+/// </summary>
 function CreateTopPanel(AOwner: TWinControl): TPanel;
+
+/// <summary>
+/// Creates a Spin Edit control allowing user to modify a number.
+/// </summary>
 function CreateNumberControl(AOwner: TWinControl; AControl: TJDVNumberControl; OnChanged: TNotifyEvent; const Index: Integer): TPanel;
+
+/// <summary>
+/// Creates a Button control allowing user to click to execute an action.
+/// </summary>
 function CreateButtonControl(AOwner: TWinControl; AControl: TJDVButtonControl; const Index: Integer): TPanel;
+
+/// <summary>
+/// Creates a Checkbox control allowing user to toggle a boolean True or False.
+/// </summary>
 function CreateCheckControl(AOwner: TWinControl; AControl: TJDVCheckControl; OnChanged: TNotifyEvent; const Index: Integer): TPanel;
+
+//Text
+
+//Dropdown
+
+//Color
+
 
 implementation
 

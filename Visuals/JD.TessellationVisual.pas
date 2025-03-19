@@ -114,6 +114,7 @@ end;
 constructor TTessellationVisual.Create(AOwner: TComponent);
 begin
   inherited;
+  VisualName := 'Tessellations';
   FPatternType:= TPatternType.ptHexagons;
 
   FShapesLock:= TCriticalSection.Create;
@@ -259,6 +260,12 @@ begin
   end;
 end;
 
+procedure TTessellationVisual.SetGradRange(const Value: Integer);
+begin
+  FGradRange := Value;
+  Regenerate;
+end;
+
 procedure TTessellationVisual.SetBackGradEnd(const Value: TJDAlphaColorRef);
 begin
   FBackGradEnd.Assign(Value);
@@ -268,12 +275,6 @@ end;
 procedure TTessellationVisual.SetBackGradStart(const Value: TJDAlphaColorRef);
 begin
   FBackGradStart.Assign(Value);
-  Regenerate;
-end;
-
-procedure TTessellationVisual.SetGradRange(const Value: Integer);
-begin
-  FGradRange := Value;
   Regenerate;
 end;
 
@@ -539,24 +540,19 @@ var
   StaticHexagon: TArray<TGPPointF>;
 begin
   StaticHexagon := MakeHexagon(FShapeSize);
-
-  HexHeight := FShapeSize * Sqrt(3);          // Height of a hexagon (distance between two flat sides)
-  HorizontalSpacing := FShapeSize * 1.5;     // Horizontal center-to-center distance
-  VerticalSpacing := HexHeight * 0.5;        // Vertical spacing for row alignment
-
+  HexHeight := FShapeSize * Sqrt(3);        // Height of a hexagon (distance between two flat sides)
+  HorizontalSpacing := FShapeSize * 1.5;    // Horizontal center-to-center distance
+  VerticalSpacing := HexHeight * 0.5;       // Vertical spacing for row alignment
   for Y := 0 to Trunc(Thread.Height / HexHeight) + 1 do begin
     for X := 0 to Trunc(Thread.Width / HorizontalSpacing) + 1 do begin
       CenterX := X * HorizontalSpacing;
       CenterY := Y * HexHeight + (X mod 2) * (HexHeight / 2);
-
       if (CenterX > Thread.Width + FShapeSize) or (CenterY > Thread.Height + FShapeSize) then
         Continue;
-
       Shape := MakeShape;
       Shape.Polygon := StaticHexagon;
       Shape.CenterPos.X := CenterX;
       Shape.CenterPos.Y := CenterY;
-
       AddShape(Shape);
     end;
   end;

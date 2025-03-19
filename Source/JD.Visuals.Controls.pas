@@ -3,7 +3,8 @@ unit JD.Visuals.Controls;
 interface
 
 uses
-  System.Classes, System.SysUtils, System.Generics.Collections;
+  System.Classes, System.SysUtils, System.Generics.Collections,
+  JD.Graphics, JD.Common;
 
 type
   TJDVisualControls = class;
@@ -91,6 +92,30 @@ type
     constructor Create(AOwner: TJDVisualControls); override;
     destructor Destroy; override;
     property Checked: Boolean read FChecked write SetChecked;
+  end;
+
+  TJDVTextControl = class(TJDVisualControlBase)
+  private
+    FText: String;
+    procedure SetText(const Value: String);
+  public
+    constructor Create(AOwner: TJDVisualControls); override;
+    destructor Destroy; override;
+    property Text: String read FText write SetText;
+  end;
+
+  TJDVDropdownControl = class(TJDVisualControlBase)
+  private
+    FItems: TStringList;
+  public
+
+  end;
+
+  TJDVColorControl = class(TJDVisualControlBase)
+  private
+    FColor: TJDColor;
+  public
+
   end;
 
 implementation
@@ -276,6 +301,25 @@ end;
 procedure TJDVCheckControl.SetChecked(const Value: Boolean);
 begin
   FChecked := Value;
+end;
+
+{ TJDVTextControl }
+
+constructor TJDVTextControl.Create(AOwner: TJDVisualControls);
+begin
+  inherited;
+
+end;
+
+destructor TJDVTextControl.Destroy;
+begin
+
+  inherited;
+end;
+
+procedure TJDVTextControl.SetText(const Value: String);
+begin
+  FText := Value;
 end;
 
 end.

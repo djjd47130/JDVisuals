@@ -8,12 +8,14 @@ uses
   System.SyncObjs,
   Vcl.Graphics, Vcl.Controls, Vcl.ExtCtrls,
   GDIPAPI, GDIPOBJ,
-  JD.Visuals.Controls, JD.Visuals.Utils;
+  JD.Visuals.Controls, JD.Visuals.Utils,
+  JD.Common, JD.Graphics;
 
 type
   TJDVisual = class;
   TJDVisualsThread = class;
   TJDVisualView = class;
+  TJDVisualEngine = class;
 
   TJDVisualClass = class of TJDVisual;
 
@@ -125,6 +127,40 @@ type
     property OnResize;
     property OnStartDock;
     property OnUnDock;
+  end;
+
+  //New alternative option than just TJDVisualView - a non-visual component
+  //  with events to render to third-party canvas via OnPaint event.
+  TJDVisualEngine = class(TJDComponent)
+  private
+    FBitmap: TBitmap;
+    FVisual: TJDVisual;
+    FThread: TJDVisualsThread;
+    FTimer: TTimer;
+    procedure TimerExec(Sender: TObject);
+    procedure ThreadGetDimensions(Sender: TJDVisualsThread; var Width, Height: Integer);
+    procedure SetVisual(const Value: TJDVisual);
+    function GetInterval: Integer;
+    procedure SetInterval(const Value: Integer);
+    function GetHeight: Integer;
+    procedure SetHeight(const Value: Integer);
+    function GetWidth: Integer;
+    procedure SetWidth(const Value: Integer);
+  protected
+
+  public
+    constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
+    procedure Invalidate; virtual;
+    procedure DrawTo(const X, Y: Integer; Canvas: TCanvas); overload;
+    procedure DrawTo(const X, Y: Integer; DC: HDC); overload;
+  published
+    property Height: Integer read GetHeight write SetHeight;
+    property Interval: Integer read GetInterval write SetInterval;
+    property Visual: TJDVisual read FVisual write SetVisual;
+    property Width: Integer read GetWidth write SetWidth;
+    //property OnPaint
+    //property OnStep
   end;
 
 implementation
@@ -377,6 +413,105 @@ begin
 end;
 
 procedure TJDVisualView.TimerExec(Sender: TObject);
+begin
+  Invalidate;
+end;
+
+{ TJDVisualEngine }
+
+constructor TJDVisualEngine.Create(AOwner: TComponent);
+begin
+  inherited;
+  //Color:= clBlack;
+  FVisual:= nil;
+
+  FBitmap:= TBitmap.Create;
+  FBitmap.PixelFormat:= pf32bit;
+
+  FTimer:= TTimer.Create(nil);
+  FTimer.Interval:= 25;
+  FTimer.OnTimer:= TimerExec;
+
+  FThread:= TJDVisualsThread.Create(FBitmap.Canvas);
+  FThread.OnGetDimensions:= ThreadGetDimensions;
+  FThread.Start;
+
+end;
+
+destructor TJDVisualEngine.Destroy;
+begin
+
+  FThread.Terminate;
+  FThread.WaitFor;
+  FreeAndNil(FThread);
+  FreeAndNil(FTimer);
+  FreeAndNil(FBitmap);
+  inherited;
+end;
+
+procedure TJDVisualEngine.DrawTo(const X, Y: Integer; DC: HDC);
+begin
+  //TODO
+
+end;
+
+procedure TJDVisualEngine.DrawTo(const X, Y: Integer; Canvas: TCanvas);
+begin
+  DrawTo(X, Y, Canvas.Handle);
+end;
+
+function TJDVisualEngine.GetHeight: Integer;
+begin
+  Result:= FBitmap.Height;
+end;
+
+function TJDVisualEngine.GetInterval: Integer;
+begin
+  Result:= FTimer.Interval;
+end;
+
+function TJDVisualEngine.GetWidth: Integer;
+begin
+  Result:= FBitmap.Width
+end;
+
+procedure TJDVisualEngine.Invalidate;
+begin
+  //TODO: Call OnPaint event...
+end;
+
+procedure TJDVisualEngine.SetHeight(const Value: Integer);
+begin
+  FBitmap.Height := Value;
+  Invalidate;
+end;
+
+procedure TJDVisualEngine.SetInterval(const Value: Integer);
+begin
+  FTimer.Interval:= Value;
+  Invalidate;
+end;
+
+procedure TJDVisualEngine.SetVisual(const Value: TJDVisual);
+begin
+  FVisual := Value;
+  Invalidate;
+end;
+
+procedure TJDVisualEngine.SetWidth(const Value: Integer);
+begin
+  FBitmap.Width := Value;
+  Invalidate;
+end;
+
+procedure TJDVisualEngine.ThreadGetDimensions(Sender: TJDVisualsThread;
+  var Width, Height: Integer);
+begin
+  Width:= Self.Width;
+  Height:= Self.Height;
+end;
+
+procedure TJDVisualEngine.TimerExec(Sender: TObject);
 begin
   Invalidate;
 end;
