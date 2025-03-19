@@ -1,5 +1,16 @@
 unit JD.SpiralOutVisual;
 
+(*
+ Spiral Out
+ Visual by Jerry Dodge
+
+ CONCEPT
+ Everything starts from a central point, and an array of points along
+ different radius around this point. It starts with a vertical line, then each
+ point rotates around the center - each point slightly faster than the prior.
+ The result is a spectacular display of different shapes and star effects.
+*)
+
 interface
 
 uses
@@ -7,11 +18,12 @@ uses
   System.Classes, System.SysUtils, System.Generics.Collections,
   Vcl.Graphics,
   GDIPAPI, GDIPOBJ,
+  JD.Common, JD.Graphics,
   JD.Visuals, JD.Visuals.Utils, JD.Visuals.Controls;
 
 const
-  POINT_COUNT = 130;
-  COLOR_TIMER_DELAY = 150;
+  POINT_COUNT = 130; //TODO: Make dynamic
+  COLOR_TIMER_DELAY = 150; //TODO: Make dynamic
   COLOR_FADE = -1; //Recommended to keep at -1
   COLOR_MAX = 253;
   COLOR_MIN = COLOR_MAX - POINT_COUNT + 10;
@@ -29,13 +41,13 @@ type
   private
     FPoints: TSpiralPoints;
     FPen: TGPPen;
-    FBaseColor: TColorRec;
+    FBaseColor: TJDColor;
     FDirR: Integer;
     FDirG: Integer;
     FDirB: Integer;
     FCurPoint: TGPPointF;
     FLast: TGPPointF;
-    FCols: TColorArray;
+    FCols: TJDColorArray;
     FColorTrack: Integer;
     FReset: Boolean;
     procedure ShiftColors;
@@ -79,13 +91,13 @@ var
 begin
   inherited;
   VisualName:= 'Spiral Out';
-  FBaseColor.R:= RandomRange(COLOR_MIN, COLOR_MAX);
-  FBaseColor.G:= RandomRange(COLOR_MIN, COLOR_MAX);
-  FBaseColor.B:= RandomRange(COLOR_MIN, COLOR_MAX);
+  FBaseColor.Red:= RandomRange(COLOR_MIN, COLOR_MAX);
+  FBaseColor.Green:= RandomRange(COLOR_MIN, COLOR_MAX);
+  FBaseColor.Blue:= RandomRange(COLOR_MIN, COLOR_MAX);
   FDirR:= 2;
   FDirG:= 3;
   FDirB:= 1;
-  FPen:= TGPPen.Create(MakeColor(FBaseColor.R, FBaseColor.G, FBaseColor.B));
+  FPen:= TGPPen.Create(MakeColor(FBaseColor.Red, FBaseColor.Green, FBaseColor.Blue));
   FPen.SetWidth(GetThickness);
   FPen.SetStartCap(LineCap.LineCapRound);
   FPen.SetEndCap(LineCap.LineCapRound);
@@ -151,7 +163,7 @@ procedure TSpiralOutVisual.SetReset(const Value: Boolean);
 begin
   if Value then begin
     FReset:= False;
-    Self.ResetButtonClick(nil);
+    ResetButtonClick(nil);
   end;
 end;
 
@@ -188,27 +200,27 @@ end;
 
 procedure TSpiralOutVisual.ShiftColors;
 begin
-  if FBaseColor.R >= COLOR_MAX then FDirR:= NegOf(FDirR);
-  if FBaseColor.R <= COLOR_MIN then FDirR:= PosOf(FDirR);
-  if FBaseColor.G >= COLOR_MAX then FDirG:= NegOf(FDirG);
-  if FBaseColor.G <= COLOR_MIN then FDirG:= PosOf(FDirG);
-  if FBaseColor.B >= COLOR_MAX then FDirB:= NegOf(FDirB);
-  if FBaseColor.B <= COLOR_MIN then FDirB:= PosOf(FDirB);
-  FBaseColor.R:= FBaseColor.R + FDirR;
-  FBaseColor.G:= FBaseColor.G + FDirG;
-  FBaseColor.B:= FBaseColor.B + FDirB;
+  if FBaseColor.Red >= COLOR_MAX then FDirR:= NegOf(FDirR);
+  if FBaseColor.Red <= COLOR_MIN then FDirR:= PosOf(FDirR);
+  if FBaseColor.Green >= COLOR_MAX then FDirG:= NegOf(FDirG);
+  if FBaseColor.Green <= COLOR_MIN then FDirG:= PosOf(FDirG);
+  if FBaseColor.Blue >= COLOR_MAX then FDirB:= NegOf(FDirB);
+  if FBaseColor.Blue <= COLOR_MIN then FDirB:= PosOf(FDirB);
+  FBaseColor.Red:= FBaseColor.Red + FDirR;
+  FBaseColor.Green:= FBaseColor.Green + FDirG;
+  FBaseColor.Blue:= FBaseColor.Blue + FDirB;
 end;
 
 procedure TSpiralOutVisual.DoPaint;
 var
   X: Integer;
 begin
-  FCols:= ColorFade(FBaseColor.Value, Length(FPoints), COLOR_FADE);
+  FCols:= ColorFade(FBaseColor, Length(FPoints), COLOR_FADE);
   FPen.SetWidth(GetThickness);
   for X := 0 to Length(FPoints)-1 do begin
     FCurPoint:= PointAroundCircle(Thread.CenterPoint, FPoints[X].Distance, FPoints[X].Degrees);
     if X > 0 then begin
-      FPen.SetColor(MakeColor(FCols[X]));
+      FPen.SetColor(TJDColor(FCols[X]).GDIPColor);
       GPCanvas.DrawLine(FPen, FLast.X, FLast.Y, FCurPoint.X, FCurPoint.Y);
     end;
     FLast:= FCurPoint;

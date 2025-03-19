@@ -16,6 +16,7 @@ uses
   System.Classes, System.SysUtils, System.Generics.Collections,
   Vcl.Graphics,
   GDIPAPI, GDIPOBJ,
+  JD.Graphics, JD.Common,
   JD.Visuals, JD.Visuals.Utils, JD.Visuals.Controls;
 
 type
@@ -106,7 +107,8 @@ constructor TFibonacciVisual.Create(AOwner: TComponent);
 begin
   inherited;
   VisualName := 'Fibonacci Spiral';
-  FPen := TGPPen.Create(MakeColor(clSkyBlue));
+  FPen:= TGPPen.Create(TJDColor(clSkyBlue).GDIPColor);
+  //FPen := TGPPen.Create(MakeColor(clSkyBlue));
   FPen.SetWidth(2.0);
   FPen.SetStartCap(LineCap.LineCapRound);
   FPen.SetEndCap(LineCap.LineCapRound);
@@ -179,6 +181,7 @@ end;
 
 procedure TFibonacciVisual.DoStep;
 const
+  //TODO: Turn these into properties / controls...
   ZoomMin = 0.1;  // Minimum zoom level
   ZoomMax = 4.62; // Maximum zoom level before resetting
   ZoomSpeed = 1.005; // Multiplier for incremental zoom
@@ -204,7 +207,7 @@ var
   procedure DoDrawRect;
   begin
     LR:= R; //Keep track of prior rectangle
-    FPen.SetColor(MakeColor(clDkGray));
+    FPen.SetColor(TJDColor(clDkGray).GDIPColor);
     FPen.SetWidth(1.0);
     if GetShowBoxes then
       GPCanvas.DrawRectangle(FPen, R);
@@ -212,7 +215,7 @@ var
   procedure DoDrawCurve;
   begin
     CP:= Point(R.X + (R.Width / 2), R.Y + (R.Height / 2));
-    FPen.SetColor(MakeColor(clSkyBlue));
+    FPen.SetColor(TJDColor(clSkyBlue).GDIPColor);
     FPen.SetWidth(GetThickness);
 
     //Here we need to assume that width/height of each box is doubled.

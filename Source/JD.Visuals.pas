@@ -84,6 +84,7 @@ type
     FThread: TJDVisualsThread;
     FTimer: TTimer;
     FVisual: TJDVisual;
+    FOnMouseMove: TMouseMoveEvent;
     procedure TimerExec(Sender: TObject);
     procedure ThreadGetDimensions(Sender: TJDVisualsThread; var Width, Height: Integer);
     procedure SetVisual(const Value: TJDVisual);
@@ -92,6 +93,7 @@ type
   protected
     procedure Paint; override;
     procedure Resize; override;
+    procedure MouseMove(Shift: TShiftState; X, Y: Integer); override;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
@@ -112,6 +114,7 @@ type
     property Visual: TJDVisual read FVisual write SetVisual;
 
     property OnClick;
+    property OnDblClick;
     property OnKeyDown;
     property OnKeyPress;
     property OnKeyUp;
@@ -119,7 +122,7 @@ type
     property OnMouseDown;
     property OnMouseEnter;
     property OnMouseLeave;
-    property OnMouseMove;
+    property OnMouseMove: TMouseMoveEvent read FOnMouseMove write FOnMouseMove;
     property OnMouseUp;
     property OnMouseWheel;
     property OnMouseWheelDown;
@@ -378,6 +381,13 @@ end;
 function TJDVisualView.GetInterval: Integer;
 begin
   Result:= FTimer.Interval;
+end;
+
+procedure TJDVisualView.MouseMove(Shift: TShiftState; X, Y: Integer);
+begin
+  inherited;
+  if Assigned(FOnMouseMove) then
+    FOnMouseMove(Self, Shift, X, Y);
 end;
 
 procedure TJDVisualView.Paint;

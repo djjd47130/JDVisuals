@@ -144,16 +144,7 @@
         <DCCReference Include="uVisual.pas">
             <Form>frmVisual</Form>
         </DCCReference>
-        <DCCReference Include="..\Visuals\JD.SpiralOutVisual.pas"/>
-        <DCCReference Include="..\Visuals\JD.FinalFrontierVisual.pas"/>
-        <DCCReference Include="..\Visuals\JD.FinalFrontierVisual.AvgCalc.pas"/>
-        <DCCReference Include="..\Visuals\JD.FinalFrontierVisual.CpuUsage.pas"/>
-        <DCCReference Include="..\Visuals\JD.RaindropsVisual.pas"/>
-        <DCCReference Include="..\Visuals\JD.FibonacciVisual.pas"/>
-        <DCCReference Include="..\Visuals\JD.MatrixVisual.pas"/>
         <DCCReference Include="VisualControls.pas"/>
-        <DCCReference Include="..\Visuals\JD.ChessboardVisual.pas"/>
-        <DCCReference Include="..\Visuals\JD.CircleTraceVisual.pas"/>
         <BuildConfiguration Include="Release">
             <Key>Cfg_2</Key>
             <CfgParent>Base</CfgParent>

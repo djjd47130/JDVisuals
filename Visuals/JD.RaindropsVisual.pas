@@ -14,7 +14,8 @@ uses
   System.Classes, System.SysUtils, System.Generics.Collections,
   Vcl.Graphics,
   GDIPAPI, GDIPOBJ,
-  JD.Visuals, JD.Visuals.Utils, JD.Visuals.Controls;
+  JD.Visuals, JD.Visuals.Utils, JD.Visuals.Controls,
+  JD.Graphics, JD.Common;
 
 const
   DROP_COUNT = 300;
@@ -66,7 +67,7 @@ var
 begin
   inherited;
   VisualName:= 'Raindrops';
-  FPen:= TGPPen.Create(MakeColor(clSkyBlue));
+  FPen:= TGPPen.Create(TJDColor(clSkyBlue).GDIPColor);
   FPen.SetWidth(7.0);
   FPen.SetStartCap(LineCap.LineCapRound);
   FPen.SetEndCap(LineCap.LineCapRound);
@@ -119,7 +120,7 @@ begin
   for X := 0 to Length(FDrops)-1 do begin
     if FDrops[X].Spread = 0 then begin
       //Drop falling...
-      FPen.SetColor(MakeColor(FDrops[X].Color));
+      FPen.SetColor(TJDColor(FDrops[X].Color).GDIPColor);
       FPen.SetWidth((MAX_DEPTH - FDrops[X].Depth)*0.3);
       GPCanvas.DrawLine(FPen, FDrops[X].HorzPos, FDrops[X].VertPos, FDrops[X].HorzPos+1, FDrops[X].VertPos+1);
     end else begin
@@ -129,7 +130,7 @@ begin
       R.X:= FDrops[X].HorzPos - (R.Width / 2);
       R.Y:= FDrops[X].VertPos - (R.Height / 2);
       FPen.SetWidth((MAX_DEPTH - FDrops[X].Depth)*0.2); //TODO: Make thinner as spread grows
-      FPen.SetColor(MakeColor(ColorFade(FDrops[X].Color, -Round(FDrops[X].Spread * 1.5))));
+      FPen.SetColor(TJDColor(ColorFade(FDrops[X].Color, -Round(FDrops[X].Spread * 1.5))).GDIPColor);
       GPCanvas.DrawEllipse(FPen, R);
     end;
   end;

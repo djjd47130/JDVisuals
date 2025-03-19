@@ -2,7 +2,7 @@ object frmVisual: TfrmVisual
   Left = 0
   Top = 0
   Caption = 'JD Visuals'
-  ClientHeight = 555
+  ClientHeight = 524
   ClientWidth = 1027
   Color = clBlack
   DoubleBuffered = True
@@ -18,30 +18,33 @@ object frmVisual: TfrmVisual
   OnResize = FormResize
   DesignSize = (
     1027
-    555)
+    524)
   PixelsPerInch = 96
   TextHeight = 13
   object View: TJDVisualView
-    Left = 128
+    Left = 200
     Top = 0
-    Width = 899
-    Height = 555
+    Width = 827
+    Height = 524
     Align = alRight
     Anchors = [akLeft, akTop, akRight, akBottom]
     Color = clBlack
     Interval = 10
     ParentColor = False
     Visual = SpiralOutVisual1
+    OnDblClick = ViewDblClick
     OnMouseMove = ViewMouseMove
-    ExplicitWidth = 852
-    ExplicitHeight = 514
+    ExplicitLeft = 192
+    ExplicitTop = 8
   end
   object pTop: TPanel
     Left = 0
     Top = 0
     Width = 1027
-    Height = 46
+    Height = 50
     Anchors = [akLeft, akTop, akRight]
+    BevelEdges = [beBottom]
+    BevelKind = bkFlat
     BevelOuter = bvNone
     DoubleBuffered = False
     ParentBackground = False
@@ -49,13 +52,13 @@ object frmVisual: TfrmVisual
     ParentDoubleBuffered = False
     TabOrder = 0
     OnExit = pTopExit
-    ExplicitWidth = 980
+    OnMouseMove = pTopMouseMove
     object Panel1: TPanel
       Tag = -1
       Left = 0
       Top = 0
       Width = 153
-      Height = 46
+      Height = 48
       Align = alLeft
       BevelOuter = bvNone
       TabOrder = 0
@@ -64,7 +67,7 @@ object frmVisual: TfrmVisual
         Left = 3
         Top = 1
         Width = 147
-        Height = 12
+        Height = 14
         Margins.Top = 1
         Align = alClient
         Caption = 'Visualization'
@@ -80,7 +83,7 @@ object frmVisual: TfrmVisual
       object cboVisual: TComboBox
         AlignWithMargins = True
         Left = 3
-        Top = 19
+        Top = 21
         Width = 147
         Height = 24
         Align = alBottom
@@ -97,28 +100,27 @@ object frmVisual: TfrmVisual
     end
     object btnFullScreen: TButton
       Tag = -2
-      Left = 898
-      Top = 0
+      AlignWithMargins = True
+      Left = 895
+      Top = 3
       Width = 129
-      Height = 46
+      Height = 42
       Action = actFullScreen
       Align = alRight
       DropDownMenu = popFullScreen
       Style = bsSplitButton
       TabOrder = 1
-      ExplicitLeft = 851
     end
   end
   object tmrMain: TTimer
     Enabled = False
     Interval = 25
-    OnTimer = tmrMainTimer
     Left = 48
-    Top = 104
+    Top = 56
   end
   object Acts: TActionList
     Left = 48
-    Top = 56
+    Top = 104
     object actFullScreen: TAction
       Category = 'View'
       Caption = 'Enter Full Screen'
@@ -128,7 +130,7 @@ object frmVisual: TfrmVisual
   end
   object FibonacciVisual1: TFibonacciVisual
     Thickness = 5.000000000000000000
-    Zoom = 0.357500000000000000
+    Zoom = 0.119000000000000000
     Count = 30
     ShowBoxes = False
     ShowSpiral = True
@@ -136,7 +138,7 @@ object frmVisual: TfrmVisual
     Top = 176
   end
   object FinalFrontierVisual1: TFinalFrontierVisual
-    Speed = 0.952947020530700700
+    Speed = 0.728646755218505900
     MinSpeed = 0.000199999994947575
     MaxSpeed = 1.000000000000000000
     Left = 48
@@ -145,9 +147,9 @@ object frmVisual: TfrmVisual
   object SpiralOutVisual1: TSpiralOutVisual
     Reset = False
     ColorFrequency = 15
-    Spacing = 4.200000000000000000
-    SpeedFactor = 0.030000000000000000
-    Thickness = 6.900000000000000000
+    Spacing = 1.000000000000000000
+    SpeedFactor = 0.035000000000000000
+    Thickness = 4.200000000000000000
     Left = 48
     Top = 272
   end
@@ -180,20 +182,30 @@ object frmVisual: TfrmVisual
     PatternType = ptHexagons
     ShapeSize = 64.000000000000000000
     LineWidth = 0.500000000000000000
-    BackGradStart.Color = -11382408
+    BackGradStart.Color = -3845704
     BackGradStart.UseStandardColor = False
     BackGradStart.Alpha = 255
-    BackGradEnd.Color = -1269673608
+    BackGradEnd.Color = -1262136904
     BackGradEnd.UseStandardColor = False
     BackGradEnd.Alpha = 180
-    LineGradStart.Color = -1772990088
+    LineGradStart.Color = -1765453384
     LineGradStart.UseStandardColor = False
     LineGradStart.Alpha = 150
-    LineGradEnd.Color = 5394808
+    LineGradEnd.Color = 12931512
     LineGradEnd.UseStandardColor = False
     LineGradEnd.Alpha = 0
     GradRange = 200
     Left = 48
     Top = 320
+  end
+  object MatrixVisual1: TMatrixVisual
+    Left = 48
+    Top = 416
+  end
+  object tmrMouse: TTimer
+    Interval = 1500
+    OnTimer = tmrMouseTimer
+    Left = 120
+    Top = 56
   end
 end

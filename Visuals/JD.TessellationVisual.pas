@@ -62,7 +62,6 @@ type
     procedure CreateOctagonMesh;
     function MakeOctagon(Size: Single): TArray<TGPPointF>;
     function MakeDiamond(Size: Single): TArray<TGPPointF>;
-    function ShapeExistsAt(Shapes: TArray<TShapeInfo>; X, Y: Single): Boolean;
     procedure SetGradRange(const Value: Integer);
     procedure SetBackGradEnd(const Value: TJDAlphaColorRef);
     procedure SetBackGradStart(const Value: TJDAlphaColorRef);
@@ -77,6 +76,8 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
+
+    function ShapeExistsAt(Shapes: TArray<TShapeInfo>; X, Y: Single): Boolean;
 
   published
     property PatternType: TPatternType read FPatternType write SetPatternType;
@@ -487,7 +488,7 @@ var
   X, Y: Integer;
   Offset: Single;
   Shape: TShapeInfo;
-  Upward: Boolean;
+  //Upward: Boolean;
   StaticUpwardTriangle, StaticDownwardTriangle: TArray<TGPPointF>;
 begin
   StaticUpwardTriangle := MakeCopilotTriangle(FShapeSize, True);   // Upward triangle
@@ -535,14 +536,14 @@ end;
 procedure TTessellationVisual.CreateHexagonMesh;
 var
   X, Y: Integer;
-  CenterX, CenterY, HexHeight, HorizontalSpacing, VerticalSpacing: Single;
+  CenterX, CenterY, HexHeight, HorizontalSpacing{, VerticalSpacing}: Single;
   Shape: TShapeInfo;
   StaticHexagon: TArray<TGPPointF>;
 begin
   StaticHexagon := MakeHexagon(FShapeSize);
   HexHeight := FShapeSize * Sqrt(3);        // Height of a hexagon (distance between two flat sides)
   HorizontalSpacing := FShapeSize * 1.5;    // Horizontal center-to-center distance
-  VerticalSpacing := HexHeight * 0.5;       // Vertical spacing for row alignment
+  //VerticalSpacing := HexHeight * 0.5;       // Vertical spacing for row alignment
   for Y := 0 to Trunc(Thread.Height / HexHeight) + 1 do begin
     for X := 0 to Trunc(Thread.Width / HorizontalSpacing) + 1 do begin
       CenterX := X * HorizontalSpacing;

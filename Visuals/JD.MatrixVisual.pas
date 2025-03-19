@@ -101,9 +101,9 @@ end;
 
 procedure TMatrixVisual.CreateControls;
 begin
-  Controls.NewNumberControl('Char Count', ntInteger, 170, 10, 1000, 0, 10);
-  Controls.NewNumberControl('Trail Size', ntInteger, 27, 0, 50, 0, 1);
-  Controls.NewNumberControl('Font Size',  ntInteger, 27, 2, 100, 0, 1);
+  Controls.NewNumberControl('Char Count', ntInteger, 200, 10, 1000, 0, 10);
+  Controls.NewNumberControl('Trail Size', ntInteger, 30, 0, 50, 0, 1);
+  Controls.NewNumberControl('Font Size',  ntInteger, 30, 2, 100, 0, 1);
 
 end;
 

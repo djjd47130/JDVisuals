@@ -3,13 +3,16 @@
         <ProjectGuid>{7FB92058-CAB0-4F20-A91F-7974ECD967C1}</ProjectGuid>
     </PropertyGroup>
     <ItemGroup>
+        <Projects Include="..\JDLib-master\JDLibComponents.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="..\JDLib-master\DclJDLibComponents.dproj">
+            <Dependencies/>
+        </Projects>
         <Projects Include="Packages\DX10_1\JDVisualsComponentsDX10_1.dproj">
             <Dependencies/>
         </Projects>
         <Projects Include="JDVisuals\JDVisuals.dproj">
-            <Dependencies/>
-        </Projects>
-        <Projects Include="..\..\JD\Delphi\JDMesh\JDMesh.dproj">
             <Dependencies/>
         </Projects>
     </ItemGroup>
@@ -20,6 +23,24 @@
             <Default.Personality/>
         </BorlandProject>
     </ProjectExtensions>
+    <Target Name="JDLibComponents">
+        <MSBuild Projects="..\JDLib-master\JDLibComponents.dproj"/>
+    </Target>
+    <Target Name="JDLibComponents:Clean">
+        <MSBuild Projects="..\JDLib-master\JDLibComponents.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="JDLibComponents:Make">
+        <MSBuild Projects="..\JDLib-master\JDLibComponents.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="DclJDLibComponents">
+        <MSBuild Projects="..\JDLib-master\DclJDLibComponents.dproj"/>
+    </Target>
+    <Target Name="DclJDLibComponents:Clean">
+        <MSBuild Projects="..\JDLib-master\DclJDLibComponents.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="DclJDLibComponents:Make">
+        <MSBuild Projects="..\JDLib-master\DclJDLibComponents.dproj" Targets="Make"/>
+    </Target>
     <Target Name="JDVisualsComponentsDX10_1">
         <MSBuild Projects="Packages\DX10_1\JDVisualsComponentsDX10_1.dproj"/>
     </Target>
@@ -38,23 +59,14 @@
     <Target Name="JDVisuals:Make">
         <MSBuild Projects="JDVisuals\JDVisuals.dproj" Targets="Make"/>
     </Target>
-    <Target Name="JDMesh">
-        <MSBuild Projects="..\..\JD\Delphi\JDMesh\JDMesh.dproj"/>
-    </Target>
-    <Target Name="JDMesh:Clean">
-        <MSBuild Projects="..\..\JD\Delphi\JDMesh\JDMesh.dproj" Targets="Clean"/>
-    </Target>
-    <Target Name="JDMesh:Make">
-        <MSBuild Projects="..\..\JD\Delphi\JDMesh\JDMesh.dproj" Targets="Make"/>
-    </Target>
     <Target Name="Build">
-        <CallTarget Targets="JDVisualsComponentsDX10_1;JDVisuals;JDMesh"/>
+        <CallTarget Targets="JDLibComponents;DclJDLibComponents;JDVisualsComponentsDX10_1;JDVisuals"/>
     </Target>
     <Target Name="Clean">
-        <CallTarget Targets="JDVisualsComponentsDX10_1:Clean;JDVisuals:Clean;JDMesh:Clean"/>
+        <CallTarget Targets="JDLibComponents:Clean;DclJDLibComponents:Clean;JDVisualsComponentsDX10_1:Clean;JDVisuals:Clean"/>
     </Target>
     <Target Name="Make">
-        <CallTarget Targets="JDVisualsComponentsDX10_1:Make;JDVisuals:Make;JDMesh:Make"/>
+        <CallTarget Targets="JDLibComponents:Make;DclJDLibComponents:Make;JDVisualsComponentsDX10_1:Make;JDVisuals:Make"/>
     </Target>
     <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
 </Project>

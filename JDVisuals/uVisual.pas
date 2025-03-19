@@ -52,7 +52,7 @@ uses
   JD.FinalFrontierVisual,
   JD.SpiralOutVisual,
   RzButton,
-  Vcl.Menus, Vcl.Mask, RzEdit, RzCmboBx, JD.TessellationVisual;
+  Vcl.Menus, Vcl.Mask, RzEdit, RzCmboBx, JD.TessellationVisual, JD.MatrixVisual;
 type
 
   TfrmVisual = class(TForm)
@@ -74,7 +74,8 @@ type
     mFullAll: TMenuItem;
     RaindropVisual1: TRaindropVisual;
     TessellationVisual1: TTessellationVisual;
-    procedure tmrMainTimer(Sender: TObject);
+    MatrixVisual1: TMatrixVisual;
+    tmrMouse: TTimer;
     procedure FormCreate(Sender: TObject);
     procedure ViewMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
     procedure pTopExit(Sender: TObject);
@@ -82,8 +83,13 @@ type
     procedure btnFullScreenClick(Sender: TObject);
     procedure FormResize(Sender: TObject);
     procedure mFullAllClick(Sender: TObject);
+    procedure tmrMouseTimer(Sender: TObject);
+    procedure pTopMouseMove(Sender: TObject; Shift: TShiftState; X, Y: Integer);
+    procedure ViewDblClick(Sender: TObject);
   private
     FControls: TVisualControlPanel;
+    FMouseX: Integer;
+    FMouseY: Integer;
     procedure PopulateVisualizations;
     procedure QueryVisuals(AStrings: TStrings);
     procedure SetFullScreen;
@@ -209,18 +215,9 @@ begin
   end;
 end;
 
-procedure TfrmVisual.tmrMainTimer(Sender: TObject);
+procedure TfrmVisual.ViewDblClick(Sender: TObject);
 begin
-  Invalidate;
-end;
-
-procedure TfrmVisual.ViewMouseMove(Sender: TObject; Shift: TShiftState; X,
-  Y: Integer);
-begin
-  if Y < pTop.Height then
-    ShowControls
-  else
-    ShowControls(False);
+  actFullScreen.Execute;
 end;
 
 procedure TfrmVisual.FormResize(Sender: TObject);
@@ -251,12 +248,43 @@ begin
   ShowControls(False);
 end;
 
+procedure TfrmVisual.pTopMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  tmrMouse.Enabled:= False;
+  //tmrMouse.Enabled:= True;
+  ShowControls;
+  Screen.Cursor:= crDefault;
+end;
+
+procedure TfrmVisual.ViewMouseMove(Sender: TObject; Shift: TShiftState; X,
+  Y: Integer);
+begin
+  if (FMouseX <> X) or (FMouseY <> Y) or (Y < pTop.Height) then begin
+    tmrMouse.Enabled:= False;
+    FMouseX:= X;
+    FMouseY:= Y;
+    ShowControls;
+    Screen.Cursor:= crDefault;
+    tmrMouse.Enabled:= True;
+  end;
+end;
+
 procedure TfrmVisual.ShowControls(const AShow: Boolean);
 begin
   if AShow then
     pTop.Top:= 0
   else begin
-    pTop.Top:= -pTop.Height;
+    pTop.Top:= -pTop.Height-1;
+  end;
+end;
+
+procedure TfrmVisual.tmrMouseTimer(Sender: TObject);
+begin
+  if FMouseY > pTop.Height then begin
+    tmrMouse.Enabled:= False;
+    Screen.Cursor:= crNone;
+    ShowControls(False);
   end;
 end;
 
